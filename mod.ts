@@ -1,1 +1,1 @@
-export {multiParser} from "./lib/multiparser.ts"
+export {multiParser} from "./lib/multiParser.ts"

@@ -16,7 +16,7 @@ This project is under development, some documentation and api may change during 
 
 ```ts
 import { serve } from "https://deno.land/std@0.53.0/http/server.ts";
-import { multiParser } from '../mod.ts'
+import { multiParser } from 'https://raw.githubusercontent.com/deligenius/multiparser/master/mod.ts'
 
 const s = serve({ port: 8000 });
 for await (const req of s) {
@@ -43,7 +43,7 @@ for await (const req of s) {
 ### With Deno http module
 ```ts
 import { Application, Context } from "https://deno.land/x/oak/mod.ts";
-import { multiParser } from '../mod.ts'
+import { multiParser } from 'https://raw.githubusercontent.com/deligenius/multiparser/master/mod.ts'
 
 const app = new Application();
 

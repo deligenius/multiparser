@@ -12,17 +12,19 @@ This project is under development, some documentation and api may change during 
 
 ### Usage
 ```ts
-const form = await multiParser(request)
+const form = await multiParser(request, maxMem?)
 ```
 ```request: serverRequest``` is a raw server request coming from Deno http module.
 
+```maxMem: number``` maximum memory size to store file in memory,``` unit: byte```
+* default ```10485760``` bytes (10MB)
 
 ## Examples
 
 ### With Deno http module
 
 ```ts
-import { serve } from "https://deno.land/std@0.53.0/http/server.ts";
+import { serve } from "https://deno.land/std/http/server.ts";
 import { multiParser } from 'https://raw.githubusercontent.com/deligenius/multiparser/master/mod.ts'
 
 const s = serve({ port: 8000 });

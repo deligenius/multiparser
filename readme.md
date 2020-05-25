@@ -10,6 +10,13 @@ This project is under development, some documentation and api may change during 
 - Maximum file size option
 - Easy to understand examples
 
+### Usage
+```ts
+const form = await multiParser(request)
+```
+```request: serverRequest``` is a raw server request coming from Deno http module.
+
+
 ## Examples
 
 ### With Deno http module

@@ -29,8 +29,8 @@ const form = await multiParser(request, maxMem?)
       * content can be used as ```Deno.writeFileSync(<FileName>, <content>)``` to save to local file system
     * size: ```number```
 
+sample returned form value:
 ```json
-// sample returned form value
 {
   title: "123145",
   singleFile: {

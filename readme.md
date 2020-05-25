@@ -47,7 +47,7 @@ for await (const req of s) {
 }
 ```
 
-### With Deno http module
+### With Oak framework
 ```ts
 import { Application, Context } from "https://deno.land/x/oak/mod.ts";
 import { multiParser } from 'https://raw.githubusercontent.com/deligenius/multiparser/master/mod.ts'

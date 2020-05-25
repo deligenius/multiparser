@@ -19,6 +19,32 @@ const form = await multiParser(request, maxMem?)
 ```maxMem: number``` maximum memory size to store file in memory,``` unit: byte```
 * default ```10485760``` bytes (10MB)
 
+### Return value: 
+
+* Text field will return as [key]:value
+* File field will return with 
+    * title: ```string```
+    * type: ```string```
+    * content: ```Uint8Array```
+      * content can be used as ```Deno.writeFileSync(<FileName>, <content>)``` to save to local file system
+    * size: ```number```
+
+```json
+// sample returned form value
+{
+  title: "123145",
+  singleFile: {
+    filename: "small.png",
+    type: "image/png",
+    content: Uint8Array(6229) [
+      137, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72,  68,
+      ... 6129 more items
+    ],
+    size: 6229
+  }
+}
+```
+
 ## Examples
 
 ### With Deno http module

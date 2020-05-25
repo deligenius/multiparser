@@ -23,7 +23,7 @@ const form = await multiParser(request, maxMem?)
 
 * Text field will return as ```[key]: value```
 * File field will return a object with
-    * title: ```string```
+    * filename: ```string```
     * type: ```string```
     * content: ```Uint8Array```
       * content can be used as ```Deno.writeFileSync(<FileName>, <content>)``` to save to local file system

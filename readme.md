@@ -21,8 +21,8 @@ const form = await multiParser(request, maxMem?)
 
 ### Return value: 
 
-* Text field will return as [key]:value
-* File field will return with 
+* Text field will return as ```[key]: value```
+* File field will return a object with
     * title: ```string```
     * type: ```string```
     * content: ```Uint8Array```

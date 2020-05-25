@@ -2,8 +2,6 @@
 
 > A Deno module for parsing multipart/form-data
 
-This project is under development, some documentation and api may change during the time. 
-
 ### Features:
 
 - Very simple API

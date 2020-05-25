@@ -30,7 +30,7 @@ const form = await multiParser(request, maxMem?)
     * size: ```number```
 
 sample returned form value:
-```json
+```ts
 {
   title: "123145",
   singleFile: {

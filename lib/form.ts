@@ -1,21 +1,32 @@
 import * as bytes from "../std/bytes/mod.ts";
+import nanoid from "https://deno.land/x/nanoid/mod.ts";
 import { ServerRequest } from "../std/http/server.ts";
+import { extname, join } from "https://deno.land/std/path/mod.ts";
 import { getRawFields, encoder } from "./field.ts";
-import { extension } from "https://cdn.pika.dev/mime-types@^2.1.27";
+// import { extension } from "https://cdn.pika.dev/mime-types@^2.1.27";
+import { FileInfo, Options } from "./types.ts";
+import { MultiParserError } from "./error.ts";
 
-interface FileInfo extends Record<string, any> {
-  contentDisposition: string;
-  name: string;
-  filename?: string;
-  contentType: string;
-  ext: string;
-  content: Uint8Array;
+const decoder = new TextDecoder();
+
+function getDefaultOption(option: Options) {
+  return <Options> {
+    uploadDir: option.uploadDir ?? undefined,
+    keepExtension: option.keepExtension ?? false,
+    maxFileSize: option.maxFileSize ?? 200 << 20, //200mb
+    maxFieldSize: option.maxFieldSize ?? 20 << 20, //20mb
+    multiple: option.multiple ?? false,
+  };
 }
 
-export async function getForm(req: ServerRequest, limit: number) {
+export async function getForm(
+  req: ServerRequest,
+  option?: Options,
+): Promise<Record<string, FileInfo | FileInfo[]>> {
+  let opt = getDefaultOption(option ?? {});
   const boundaryByte = getBoundary(req.headers.get("content-type")!);
   if (boundaryByte) {
-    const rawFields = await getRawFields(req.body, boundaryByte, limit);
+    const rawFields = await getRawFields(req.body, boundaryByte, opt);
     const form: Record<string, FileInfo | FileInfo[]> = {};
     for (let field of rawFields) {
       const contentDisposition = field.headers?.get("content-disposition");
@@ -23,8 +34,11 @@ export async function getForm(req: ServerRequest, limit: number) {
       if (contentDisposition) {
         const fileInfo = getFileInfo(contentDisposition);
         fileInfo.contentType = contentType ? contentType : "text/plain";
-        fileInfo.ext = extension(fileInfo.contentType) || "unknow";
-        fileInfo.content = field.data;
+        fileInfo.ext = fileInfo.filename ? extname(fileInfo.filename) : ".txt";
+        // if filename doesn't exist, it's a string
+        fileInfo.content = fileInfo.filename
+          ? field.data
+          : decoder.decode(fileInfo.data);
 
         const name = fileInfo.name;
         // if multiple files with same field name
@@ -40,9 +54,52 @@ export async function getForm(req: ServerRequest, limit: number) {
         }
       }
     }
+
+    if (opt.uploadDir) {
+      SaveToLocal(form, opt);
+    }
     return form;
   } else {
-    return {};
+    throw new MultiParserError("no boundary found");
+  }
+}
+
+async function SaveToLocal(
+  form: Record<string, FileInfo | FileInfo[]>,
+  opt: Options,
+) {
+  ensureDirExists(opt.uploadDir!);
+
+  for (let [field, fileInfo] of Object.entries(form)) {
+    // write multiple files
+    if (fileInfo instanceof Array) {
+      for (let file of fileInfo) {
+        writeNow(file, opt);
+      }
+    } // write single file
+    else {
+      writeNow(fileInfo, opt);
+    }
+  }
+}
+
+async function ensureDirExists(dir: string) {
+  try {
+    let stat = Deno.statSync(dir);
+    return stat.isDirectory;
+  } catch (e) {
+    Deno.mkdirSync(dir);
+  }
+}
+
+function writeNow(fileInfo: FileInfo, opt: Options) {
+  let id = nanoid(12);
+  let ext = opt.keepExtension ? fileInfo.ext : "";
+  let savedFileName = id + ext;
+  fileInfo.savedFileName = savedFileName;
+  let path = join(opt.uploadDir!, savedFileName);
+  if (typeof fileInfo.content !== "string") {
+    Deno.writeFile(path, fileInfo.content);
   }
 }
 
@@ -50,7 +107,7 @@ export async function getForm(req: ServerRequest, limit: number) {
 function getFileInfo(contentDisposition: string): FileInfo {
   let fileInfo = <FileInfo> {};
   const contentDisArr = contentDisposition.split(";");
-  fileInfo["contentDisposition"] = contentDisArr[0];
+  fileInfo.contentDisposition = contentDisArr[0];
 
   let fileInfoArr = contentDisArr.slice(1);
   for (let info of fileInfoArr) {

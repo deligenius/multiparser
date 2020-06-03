@@ -1,18 +1,15 @@
 import * as bytes from "../std/bytes/mod.ts";
 import { BufReader } from "../std/io/bufio.ts";
 import { TextProtoReader } from "../std/textproto/mod.ts";
+import { RawField, Options } from "./types.ts";
+import { MultiParserError } from "./error.ts";
 
 export const encoder = new TextEncoder();
-
-interface RawField {
-  headers: Headers | null;
-  data: Uint8Array;
-}
 
 export async function getRawFields(
   reader: Deno.Reader,
   headerBoundary: Uint8Array,
-  limitBytes: number
+  opt: Options,
 ): Promise<RawField[]> {
   // boundary
   const boundaryByte = bytes.concat(encoder.encode("--"), headerBoundary);
@@ -32,14 +29,13 @@ export async function getRawFields(
   while (lineByte && !bytes.equal(lineByte.line, endBoundaryByte)) {
     if (bytes.equal(lineByte.line, boundaryByte)) {
       let headers = await getFieldHeader(bufReader);
-      let data = await getFieldData(bufReader, beginBoundaryByte, limitBytes);
-      if (data) {
-        // skip \r\n
-        bufReader.read(new Uint8Array(2));
-        rawFields.push({ headers, data });
-      }else{
-        // no data, the file size is over the limit
-        throw new Error("file is larger than the limit: " + limitBytes + "bytes" )
+      let data = await getFieldData(bufReader, beginBoundaryByte, opt);
+      // skip \r\n
+      bufReader.read(new Uint8Array(2));
+      rawFields.push({ headers, data });
+      // return single file
+      if (!opt.multiple) {
+        return rawFields;
       }
     }
 
@@ -57,17 +53,27 @@ async function getFieldHeader(bufReader: BufReader): Promise<Headers | null> {
 async function getFieldData(
   bufReader: BufReader,
   boundary: Uint8Array,
-  limitBytes: number,
-): Promise<Uint8Array | undefined> {
-  let restPart = await bufReader.peek(limitBytes + boundary.byteLength);
+  opt: Options,
+): Promise<Uint8Array> {
+  let restPart = await bufReader.peek(opt.maxFieldSize! + boundary.byteLength);
   // TODO: findIndex() may return -1, because bufReader haven't read to the end
   let fieldBodyLength = bytes.findIndex(restPart!, boundary);
   if (fieldBodyLength >= 0) {
-    let fieldDataBuf = new Uint8Array(fieldBodyLength);
+    // track maxFileSize
+    opt.maxFileSize = opt.maxFileSize! - fieldBodyLength;
+    if (opt.maxFieldSize! < 0) {
+      throw new MultiParserError(
+        "total file size is larger than the limit " + opt.maxFileSize + "bytes",
+      );
+    }
+    let fieldDataBytes = new Uint8Array(fieldBodyLength);
     // read exact fieldBodyLength bytes into fieldDataBuf
-    bufReader.read(fieldDataBuf);
-    return fieldDataBuf;
+    bufReader.read(fieldDataBytes);
+    return fieldDataBytes;
   } else {
-    return undefined;
+    // couldn't find data in given maxFieldSize
+    throw new MultiParserError(
+      "field is larger than the limit: " + opt.maxFieldSize + "bytes",
+    );
   }
 }

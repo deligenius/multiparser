@@ -55,25 +55,40 @@ async function getFieldData(
   boundary: Uint8Array,
   opt: Options,
 ): Promise<Uint8Array> {
-  let restPart = await bufReader.peek(opt.maxFieldSize! + boundary.byteLength);
-  // TODO: findIndex() may return -1, because bufReader haven't read to the end
-  let fieldBodyLength = bytes.findIndex(restPart!, boundary);
-  if (fieldBodyLength >= 0) {
-    // track maxFileSize
-    opt.maxFileSize = opt.maxFileSize! - fieldBodyLength;
-    if (opt.maxFieldSize! < 0) {
+  let restPart: Uint8Array | null;
+  // incase of peek too much, peek() will throw a BufferFullError
+  try {
+    restPart = await bufReader.peek(opt.maxFieldSize! + boundary.byteLength);
+  } catch (e) {
+    let size = bufReader.size();
+    restPart = await bufReader.peek(size);
+  }
+  bufReader.read
+
+  if (restPart) {
+    let fieldBodyLength = bytes.findIndex(restPart!, boundary);
+    // if found the body
+    if (fieldBodyLength >= 0) {
+      // track maxFileSize
+      opt.maxFileSize = opt.maxFileSize! - fieldBodyLength;
+      if (opt.maxFileSize < 0) {
+        throw new MultiParserError(
+          "Total file size is larger than the maxFileSize " + opt.maxFileSize +
+            "bytes",
+        );
+      }
+      let fieldDataBytes = new Uint8Array(fieldBodyLength);
+      // read exact fieldBodyLength bytes into fieldDataBuf
+      bufReader.read(fieldDataBytes);
+      return fieldDataBytes;
+    } else {
+      // couldn't find data in given maxFieldSize
       throw new MultiParserError(
-        "total file size is larger than the limit " + opt.maxFileSize + "bytes",
+        "One field is larger than the maxFieldSize: " + opt.maxFieldSize +
+          "bytes",
       );
     }
-    let fieldDataBytes = new Uint8Array(fieldBodyLength);
-    // read exact fieldBodyLength bytes into fieldDataBuf
-    bufReader.read(fieldDataBytes);
-    return fieldDataBytes;
   } else {
-    // couldn't find data in given maxFieldSize
-    throw new MultiParserError(
-      "field is larger than the limit: " + opt.maxFieldSize + "bytes",
-    );
+    return new Uint8Array();
   }
 }

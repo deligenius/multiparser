@@ -63,7 +63,7 @@ async function getFieldData(
     let size = bufReader.size();
     restPart = await bufReader.peek(size);
   }
-  bufReader.read
+  // bufReader.read 
 
   if (restPart) {
     let fieldBodyLength = bytes.findIndex(restPart!, boundary);

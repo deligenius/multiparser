@@ -122,7 +122,7 @@ function getFileInfo(contentDisposition: string): FileInfo {
   return fileInfo;
 }
 
-function getBoundary(contentType: string): Uint8Array | undefined {
+export function getBoundary(contentType: string): Uint8Array | undefined {
   let boundaryByte = encoder.encode("boundary=");
   let contentTypeByte = encoder.encode(contentType);
   let boundaryIndex = bytes.findIndex(contentTypeByte, boundaryByte);

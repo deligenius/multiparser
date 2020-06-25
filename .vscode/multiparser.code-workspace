@@ -10,6 +10,8 @@
     },
     "[typescriptreact]": {
       "editor.defaultFormatter": "axetroy.vscode-deno"
-    }
+    },
+    "workbench.colorTheme": "Moonlight",
+    "deno.enable": true
   }
 }

@@ -11,7 +11,11 @@
     "[typescriptreact]": {
       "editor.defaultFormatter": "axetroy.vscode-deno"
     },
+<<<<<<< HEAD:.vscode/multiparser.code-workspace
     "workbench.colorTheme": "Moonlight",
     "deno.enable": true
+=======
+    "workbench.colorTheme": "Moonlight"
+>>>>>>> d710fa8a0da3f6866e2aee67d36e455204c1484c:.vscode/deno.code-workspace
   }
 }

@@ -13,6 +13,8 @@ function refineRequest(req: any): ServerRequest {
 export function multiParser(rawReq: any, maxMem: number = 10 << 20)
   : Promise<Record<string, FormFile | string> | undefined> {
   return new Promise(async (resolve, reject) => {
+    // const refineReq = refineRequest(rawReq)
+    // TODO: use req.body only
     const refineReq = refineRequest(rawReq)
 
     const boundaryRegex = /^multipart\/form-data;\sboundary=(?<boundary>.*)$/

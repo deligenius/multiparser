@@ -2,7 +2,7 @@
 
 > A Deno module for parsing multipart/form-data
 
-[![tag](https://img.shields.io/badge/Deno%20-std%400.59.0-green?&logo=Deno)](https://deno.land/std@0.59.0)
+[![tag](https://img.shields.io/badge/Deno%20-std%400.59.0-333?&logo=Deno)](https://deno.land/std@0.59.0)
 
 ### Features:
 

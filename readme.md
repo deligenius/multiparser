@@ -19,15 +19,11 @@ const form = await multiParser(request, maxMem?)
 
 ### Return value: 
 
-* Text field will return as ```[key]: value```
-* File field will return a object with
-    * filename: ```string```
-    * type: ```string```
-    * content: ```Uint8Array```
-      * content can be used as ```Deno.writeFileSync(<FileName>, <content>)``` to save to local file system
-    * size: ```number```
+Returned valud can either be 
+- a object with `string`, `FormFile`, `FormFile[]` (array of `FormFile`) 
+- `undefined`
 
-sample returned form value:
+A sample returned form value:
 ```ts
 {
   title: "123145",
@@ -43,13 +39,33 @@ sample returned form value:
 }
 ```
 
+Here we can see `title` is a form field name, and its value is a string `"123145"`
+`singleFile` is a form field name, and its value is the type of `FormFile`,
+
+Where:
+
+```ts
+interface FormFile {
+  /** filename  */
+  filename: string;
+  /** content-type header value of file */
+  type: string;
+  /** byte size of file */
+  size: number;
+  /** in-memory content of file. Either content or tempfile is set  */
+  content?: Uint8Array;
+}
+```
+
+The `content` can be used to write file content to local disk by using `Deno.writeFile(<FileName>, <content>)`
+
 ## Examples
 
 ### With Deno http module
 
 ```ts
 import { serve } from "https://deno.land/std/http/server.ts";
-import { multiParser } from 'https://raw.githubusercontent.com/deligenius/multiparser/master/mod.ts'
+import { multiParser } from 'https://deno.land/x/multiparser/mod.ts'
 
 const s = serve({ port: 8000 });
 for await (const req of s) {
@@ -76,7 +92,7 @@ for await (const req of s) {
 ### With Oak framework
 ```ts
 import { Application, Context } from "https://deno.land/x/oak/mod.ts";
-import { multiParser } from 'https://raw.githubusercontent.com/deligenius/multiparser/master/mod.ts'
+import { multiParser } from 'https://deno.land/x/multiparser/mod.ts'
 
 const app = new Application();
 

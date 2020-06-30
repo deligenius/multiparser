@@ -1,8 +1,4 @@
-import { ServerRequest } from "https://deno.land/std@0.56.0/http/server.ts";
-import {
-  MultipartReader,
-  FormFile,
-} from "https://deno.land/std@0.56.0/mime/multipart.ts";
+import {ServerRequest, FormFile, MultipartReader} from '../deps.ts'
 
 function refineRequest(req: any): ServerRequest {
   let refinedReq = new ServerRequest();

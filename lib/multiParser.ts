@@ -1,12 +1,5 @@
 import {ServerRequest, FormFile, MultipartReader} from '../deps.ts'
 
-// function refineRequest(req: any): ServerRequest {
-//   let refinedReq = new ServerRequest();
-//   refinedReq.headers = req.headers;
-//   refinedReq.r = req.r;
-//   return refinedReq;
-// }
-
 const boundaryRegex = /^multipart\/form-data;\sboundary=(?<boundary>.*)$/;
 
 //default maxMemory = 10485760 bytes = 10 Mb

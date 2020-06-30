@@ -39,8 +39,9 @@ A sample returned form value:
 }
 ```
 
-Here we can see `title` is a form field name, and its value is a string `"123145"`
-`singleFile` is a form field name, and its value is the type of `FormFile`,
+Here we can see 
+ - `title` is a form field name, and its value is a string `"123145"`
+ - `singleFile` is a form field name, and its value is the type of `FormFile`,
 
 Where:
 

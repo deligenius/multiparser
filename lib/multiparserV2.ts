@@ -10,6 +10,7 @@ const encode = {
   dashdash: encoder.encode("--"),
   boundaryEqual: encoder.encode("boundary="),
   returnNewline2: encoder.encode("\r\n\r\n"),
+  carriageReturn: encoder.encode("\r"),
 };
 
 export interface FormFile {
@@ -34,6 +35,11 @@ export async function multiParser(req: ServerRequest, option?: any) {
     let buf = await Deno.readAll(req.body);
 
     let boundaryByte = getBoundary(req.headers.get("content-type") as string);
+    if (!boundaryByte) {
+      // no boundary found, return
+      return undefined;
+    }
+
     const pieces = getFieldPieces(buf, boundaryByte!);
 
     const form = getForm(pieces);
@@ -50,8 +56,13 @@ function getForm(pieces: Uint8Array[]) {
     const headers = getHeaders(headerByte);
     // it's a string field
     if (typeof headers === "string") {
-      // headers = field name
-      form.fields[headers] = decoder.decode(contentByte);
+      // empty content, discard it
+      if (contentByte.byteLength === 1 && contentByte[0] === 13) {
+        continue;
+      } else {
+        // headers = "field1"
+        form.fields[headers] = decoder.decode(contentByte);
+      }
     }
     // it's a file field
     else {
@@ -83,7 +94,7 @@ function getForm(pieces: Uint8Array[]) {
 function getHeaders(headerByte: Uint8Array) {
   let contentTypeIndex = bytes.findIndex(headerByte, encode.contentType);
 
-  // no contentType, it's a string field, return name only
+  // no contentType, it may be a string field, return name only
   if (contentTypeIndex < 0) {
     return getNameOnly(headerByte);
   }

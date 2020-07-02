@@ -11,6 +11,6 @@
     "[typescriptreact]": {
       "editor.defaultFormatter": "axetroy.vscode-deno"
     },
-    "workbench.colorTheme": "Moonlight"
+    "workbench.colorTheme": "Dracula Soft"
   }
 }

@@ -103,11 +103,11 @@ function getHeaderNContentType(
   headers = getHeaderOnly(contentDispositionByte);
 
   // jump over <Content-Type: >
-  let contentType = headerByte.slice(
+  let contentTypeByte = headerByte.slice(
     contentTypeIndex + encode.contentType.byteLength + 2
   );
 
-  headers.contentType = decoder.decode(contentType);
+  headers.contentType = decoder.decode(contentTypeByte);
   return headers;
 }
 
@@ -126,24 +126,24 @@ function getHeaderOnly(headerLineByte: Uint8Array) {
 function getNameNFilename(headerLineByte: Uint8Array, filenameIndex: number) {
   // fetch filename first
   let nameByte = headerLineByte.slice(0, filenameIndex - 2);
-  let _filename = headerLineByte.slice(
+  let filenameByte = headerLineByte.slice(
     filenameIndex + encode.filename.byteLength + 2,
     headerLineByte.byteLength - 1
   );
 
   let name = getNameOnly(nameByte);
-  let filename = decoder.decode(_filename);
+  let filename = decoder.decode(filenameByte);
   return { name, filename };
 }
 
 function getNameOnly(headerLineByte: Uint8Array) {
   let nameIndex = bytes.findIndex(headerLineByte, encode.name);
-  // jump <name=">
-  let name = headerLineByte.slice(
+  // jump <name="> and get string inside double quote => "string"
+  let nameByte = headerLineByte.slice(
     nameIndex + encode.name.byteLength + 2,
     headerLineByte.byteLength - 1
   );
-  return decoder.decode(name);
+  return decoder.decode(nameByte);
 }
 
 function splitPiece(piece: Uint8Array) {
@@ -163,10 +163,10 @@ function getFieldPieces(buf: Uint8Array, boundaryByte: Uint8Array) {
   while (!bytes.hasPrefix(buf, endBoundaryByte)) {
     // jump over boundary + '\r\n'
     buf = buf.slice(startBoundaryByte.byteLength + 2);
-    let boundaryPoint = bytes.findIndex(buf, startBoundaryByte);
+    let boundaryIndex = bytes.findIndex(buf, startBoundaryByte);
     // get field content piece
-    pieces.push(buf.slice(0, boundaryPoint - 1));
-    buf = buf.slice(boundaryPoint);
+    pieces.push(buf.slice(0, boundaryIndex - 1));
+    buf = buf.slice(boundaryIndex);
   }
 
   return pieces;

@@ -1,0 +1,11 @@
+name: multiparser
+description: A Deno module for parsing multipart/form-data
+version: 1.0.0
+entry: ./mod.ts
+stable: true
+unlisted: false
+fmt: true
+repository: https://github.com/deligenius/multiparser
+files:
+  - ./**/*
+  - ./README.md

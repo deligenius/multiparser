@@ -77,7 +77,7 @@ Deno.test({
           encode(src, dest);
         },
         Error,
-        "Out of index."
+        "Out of index.",
       );
     }
 
@@ -151,7 +151,7 @@ Deno.test({
       const [n, err] = decode(new TextEncoder().encode(input as string), out);
       assertEquals(
         new TextDecoder("ascii").decode(out.slice(0, n)),
-        output as string
+        output as string,
       );
       assertEquals(err, expectedErr);
     }
@@ -168,7 +168,7 @@ Deno.test({
             decodeString(input as string);
           },
           Error,
-          (expectedErr as Error).message
+          (expectedErr as Error).message,
         );
       } else {
         const out = decodeString(input as string);

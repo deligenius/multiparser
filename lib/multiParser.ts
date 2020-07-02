@@ -1,11 +1,11 @@
-import {ServerRequest, FormFile, MultipartReader} from '../deps.ts'
+import { ServerRequest, FormFile, MultipartReader } from "../deps.ts";
 
 const boundaryRegex = /^multipart\/form-data;\sboundary=(?<boundary>.*)$/;
 
 //default maxMemory = 10485760 bytes = 10 Mb
 export function multiParser(
   rawReq: any,
-  maxMem: number = 10 << 20
+  maxMem: number = 10 << 20,
 ): Promise<Record<string, FormFile | FormFile[] | string> | undefined> {
   return new Promise(async (resolve, reject) => {
     if (rawReq?.headers?.get("content-type")) {
@@ -24,14 +24,13 @@ export function multiParser(
 
       const form: Record<string, FormFile | FormFile[] | string> = {};
       for (let [key, value] of formData.entries()) {
-        form[key] = <FormFile | string>value;
+        form[key] = <FormFile | string> value;
       }
       resolve(form);
     } else {
       reject(
-        "multiParser: no content-type header, unable to find form boundary"
+        "multiParser: no content-type header, unable to find form boundary",
       );
     }
   });
 }
-

@@ -17,7 +17,7 @@ Deno.test("Callback must be a function error", function fn() {
       writeFile("some/path", "some data", "utf8");
     },
     TypeError,
-    "Callback must be a function."
+    "Callback must be a function.",
   );
 });
 
@@ -28,7 +28,7 @@ Deno.test("Invalid encoding results in error()", function testEncodingErrors() {
       writeFile("some/path", "some data", "made-up-encoding", () => {});
     },
     Error,
-    `The value "made-up-encoding" is invalid for option "encoding"`
+    `The value "made-up-encoding" is invalid for option "encoding"`,
   );
 
   assertThrows(
@@ -37,7 +37,7 @@ Deno.test("Invalid encoding results in error()", function testEncodingErrors() {
       writeFileSync("some/path", "some data", "made-up-encoding");
     },
     Error,
-    `The value "made-up-encoding" is invalid for option "encoding"`
+    `The value "made-up-encoding" is invalid for option "encoding"`,
   );
 
   assertThrows(
@@ -49,11 +49,11 @@ Deno.test("Invalid encoding results in error()", function testEncodingErrors() {
           // @ts-expect-error Type '"made-up-encoding"' is not assignable to type
           encoding: "made-up-encoding",
         },
-        () => {}
+        () => {},
       );
     },
     Error,
-    `The value "made-up-encoding" is invalid for option "encoding"`
+    `The value "made-up-encoding" is invalid for option "encoding"`,
   );
 
   assertThrows(
@@ -64,7 +64,7 @@ Deno.test("Invalid encoding results in error()", function testEncodingErrors() {
       });
     },
     Error,
-    `The value "made-up-encoding" is invalid for option "encoding"`
+    `The value "made-up-encoding" is invalid for option "encoding"`,
   );
 });
 
@@ -76,7 +76,7 @@ Deno.test(
         writeFile("some/path", "some data", "hex", () => {});
       },
       Error,
-      `Not implemented: "hex" encoding`
+      `Not implemented: "hex" encoding`,
     );
 
     assertThrows(
@@ -84,7 +84,7 @@ Deno.test(
         writeFileSync("some/path", "some data", "hex");
       },
       Error,
-      `Not implemented: "hex" encoding`
+      `Not implemented: "hex" encoding`,
     );
 
     assertThrows(
@@ -95,11 +95,11 @@ Deno.test(
           {
             encoding: "base64",
           },
-          () => {}
+          () => {},
         );
       },
       Error,
-      `Not implemented: "base64" encoding`
+      `Not implemented: "base64" encoding`,
     );
 
     assertThrows(
@@ -109,9 +109,9 @@ Deno.test(
         });
       },
       Error,
-      `Not implemented: "base64" encoding`
+      `Not implemented: "base64" encoding`,
     );
-  }
+  },
 );
 
 Deno.test(
@@ -135,7 +135,7 @@ Deno.test(
     const data = await Deno.readFile(tempFile);
     await Deno.remove(tempFile);
     assertEquals(decoder.decode(data), "hello world");
-  }
+  },
 );
 
 Deno.test(
@@ -149,7 +149,7 @@ Deno.test(
     await Deno.remove("_fs_writeFile_test_file.txt");
     assertEquals(res, null);
     assertEquals(decoder.decode(data), "hello world");
-  }
+  },
 );
 
 Deno.test("Path can be an URL", async function testCorrectWriteUsingURL() {
@@ -159,7 +159,7 @@ Deno.test("Path can be an URL", async function testCorrectWriteUsingURL() {
         path
           .join(testDataDir, "_fs_writeFile_test_file_url.txt")
           .replace(/\\/g, "/")
-      : "file://" + path.join(testDataDir, "_fs_writeFile_test_file_url.txt")
+      : "file://" + path.join(testDataDir, "_fs_writeFile_test_file_url.txt"),
   );
   const filePath = path.fromFileUrl(url);
   const res = await new Promise((resolve) => {
@@ -212,7 +212,7 @@ Deno.test(
     await Deno.remove(filename);
     assert(fileInfo.mode);
     assertNotEquals(fileInfo.mode & 0o777, 0o777);
-  }
+  },
 );
 
 Deno.test(
@@ -231,7 +231,7 @@ Deno.test(
     const data = Deno.readFileSync(tempFile);
     Deno.removeSync(tempFile);
     assertEquals(decoder.decode(data), "hello world");
-  }
+  },
 );
 
 Deno.test(
@@ -244,18 +244,18 @@ Deno.test(
     const data = Deno.readFileSync(file);
     Deno.removeSync(file);
     assertEquals(decoder.decode(data), "hello world");
-  }
+  },
 );
 
 Deno.test("sync: Path can be an URL", function testCorrectWriteSyncUsingURL() {
   const filePath = path.join(
     testDataDir,
-    "_fs_writeFileSync_test_file_url.txt"
+    "_fs_writeFileSync_test_file_url.txt",
   );
   const url = new URL(
     Deno.build.os === "windows"
       ? "file:///" + filePath.replace(/\\/g, "/")
-      : "file://" + filePath
+      : "file://" + filePath,
   );
   writeFileSync(url, "hello world");
 
@@ -276,5 +276,5 @@ Deno.test(
     Deno.removeSync(filename);
     assert(fileInfo && fileInfo.mode);
     assertEquals(fileInfo.mode & 0o777, 0o777);
-  }
+  },
 );

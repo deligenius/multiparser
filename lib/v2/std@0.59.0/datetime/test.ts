@@ -5,27 +5,27 @@ import * as datetime from "./mod.ts";
 Deno.test("parseDateTime", function (): void {
   assertEquals(
     datetime.parseDateTime("01-03-2019 16:30", "mm-dd-yyyy hh:mm"),
-    new Date(2019, 0, 3, 16, 30)
+    new Date(2019, 0, 3, 16, 30),
   );
   assertEquals(
     datetime.parseDateTime("03-01-2019 16:31", "dd-mm-yyyy hh:mm"),
-    new Date(2019, 0, 3, 16, 31)
+    new Date(2019, 0, 3, 16, 31),
   );
   assertEquals(
     datetime.parseDateTime("2019-01-03 16:32", "yyyy-mm-dd hh:mm"),
-    new Date(2019, 0, 3, 16, 32)
+    new Date(2019, 0, 3, 16, 32),
   );
   assertEquals(
     datetime.parseDateTime("16:33 01-03-2019", "hh:mm mm-dd-yyyy"),
-    new Date(2019, 0, 3, 16, 33)
+    new Date(2019, 0, 3, 16, 33),
   );
   assertEquals(
     datetime.parseDateTime("16:34 03-01-2019", "hh:mm dd-mm-yyyy"),
-    new Date(2019, 0, 3, 16, 34)
+    new Date(2019, 0, 3, 16, 34),
   );
   assertEquals(
     datetime.parseDateTime("16:35 2019-01-03", "hh:mm yyyy-mm-dd"),
-    new Date(2019, 0, 3, 16, 35)
+    new Date(2019, 0, 3, 16, 35),
   );
 });
 
@@ -36,22 +36,22 @@ Deno.test("invalidParseDateTimeFormatThrows", function (): void {
       (datetime as any).parseDateTime("2019-01-01 00:00", "x-y-z");
     },
     Error,
-    "Invalid datetime format!"
+    "Invalid datetime format!",
   );
 });
 
 Deno.test("parseDate", function (): void {
   assertEquals(
     datetime.parseDate("01-03-2019", "mm-dd-yyyy"),
-    new Date(2019, 0, 3)
+    new Date(2019, 0, 3),
   );
   assertEquals(
     datetime.parseDate("03-01-2019", "dd-mm-yyyy"),
-    new Date(2019, 0, 3)
+    new Date(2019, 0, 3),
   );
   assertEquals(
     datetime.parseDate("2019-01-03", "yyyy-mm-dd"),
-    new Date(2019, 0, 3)
+    new Date(2019, 0, 3),
   );
 });
 
@@ -62,7 +62,7 @@ Deno.test("invalidParseDateFormatThrows", function (): void {
       (datetime as any).parseDate("2019-01-01", "x-y-z");
     },
     Error,
-    "Invalid date format!"
+    "Invalid date format!",
   );
 });
 

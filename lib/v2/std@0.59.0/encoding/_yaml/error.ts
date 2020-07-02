@@ -8,7 +8,7 @@ import { Mark } from "./mark.ts";
 export class YAMLError extends Error {
   constructor(
     message = "(unknown reason)",
-    protected mark: Mark | string = ""
+    protected mark: Mark | string = "",
   ) {
     super(`${message} ${mark}`);
     this.name = this.constructor.name;

@@ -33,7 +33,9 @@ export class Sha1 {
 
   constructor(sharedMemory = false) {
     if (sharedMemory) {
-      blocks[0] = blocks[16] = blocks[1] = blocks[2] = blocks[3] = blocks[4] = blocks[5] = blocks[6] = blocks[7] = blocks[8] = blocks[9] = blocks[10] = blocks[11] = blocks[12] = blocks[13] = blocks[14] = blocks[15] = 0;
+      blocks[0] = blocks[16] = blocks[1] = blocks[2] = blocks[3] = blocks[4] =
+        blocks[5] = blocks[6] = blocks[7] = blocks[8] = blocks[9] = blocks[10] =
+          blocks[11] = blocks[12] = blocks[13] = blocks[14] = blocks[15] = 0;
       this.#blocks = blocks;
     } else {
       this.#blocks = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -70,7 +72,9 @@ export class Sha1 {
       if (this.#hashed) {
         this.#hashed = false;
         blocks[0] = this.#block;
-        blocks[16] = blocks[1] = blocks[2] = blocks[3] = blocks[4] = blocks[5] = blocks[6] = blocks[7] = blocks[8] = blocks[9] = blocks[10] = blocks[11] = blocks[12] = blocks[13] = blocks[14] = blocks[15] = 0;
+        blocks[16] = blocks[1] = blocks[2] = blocks[3] = blocks[4] = blocks[5] =
+          blocks[6] = blocks[7] = blocks[8] = blocks[9] = blocks[10] =
+            blocks[11] = blocks[12] = blocks[13] = blocks[14] = blocks[15] = 0;
       }
 
       if (typeof msg !== "string") {
@@ -90,8 +94,7 @@ export class Sha1 {
             blocks[i >> 2] |= (0x80 | ((code >> 6) & 0x3f)) << SHIFT[i++ & 3];
             blocks[i >> 2] |= (0x80 | (code & 0x3f)) << SHIFT[i++ & 3];
           } else {
-            code =
-              0x10000 +
+            code = 0x10000 +
               (((code & 0x3ff) << 10) | (msg.charCodeAt(++index) & 0x3ff));
             blocks[i >> 2] |= (0xf0 | (code >> 18)) << SHIFT[i++ & 3];
             blocks[i >> 2] |= (0x80 | ((code >> 12) & 0x3f)) << SHIFT[i++ & 3];
@@ -134,7 +137,9 @@ export class Sha1 {
         this.hash();
       }
       blocks[0] = this.#block;
-      blocks[16] = blocks[1] = blocks[2] = blocks[3] = blocks[4] = blocks[5] = blocks[6] = blocks[7] = blocks[8] = blocks[9] = blocks[10] = blocks[11] = blocks[12] = blocks[13] = blocks[14] = blocks[15] = 0;
+      blocks[16] = blocks[1] = blocks[2] = blocks[3] = blocks[4] = blocks[5] =
+        blocks[6] = blocks[7] = blocks[8] = blocks[9] = blocks[10] =
+          blocks[11] = blocks[12] = blocks[13] = blocks[14] = blocks[15] = 0;
     }
     blocks[14] = (this.#hBytes << 3) | (this.#bytes >>> 29);
     blocks[15] = this.#bytes << 3;

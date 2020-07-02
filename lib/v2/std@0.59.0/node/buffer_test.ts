@@ -10,7 +10,7 @@ Deno.test({
       },
       RangeError,
       "Invalid typed array length: -1",
-      "should throw on negative numbers"
+      "should throw on negative numbers",
     );
   },
 });
@@ -45,7 +45,7 @@ Deno.test({
     assertEquals(
       Buffer.byteLength(Buffer.alloc(0)),
       Buffer.alloc(0).byteLength,
-      "Byte lenght differs on buffers"
+      "Byte lenght differs on buffers",
     );
   },
 });
@@ -98,7 +98,7 @@ Deno.test({
       },
       RangeError,
       "offset is out of bounds",
-      "should throw on negative numbers"
+      "should throw on negative numbers",
     );
   },
 });
@@ -111,7 +111,7 @@ Deno.test({
     assertEquals(
       buffer.toString(),
       "test",
-      "Buffer to string should recover the string"
+      "Buffer to string should recover the string",
     );
   },
 });
@@ -122,13 +122,13 @@ Deno.test({
     for (const encoding of ["hex", "HEX"]) {
       const buffer: Buffer = Buffer.from(
         "7468697320697320612074c3a97374",
-        encoding
+        encoding,
       );
       assertEquals(buffer.length, 15, "Buffer length should be 15");
       assertEquals(
         buffer.toString(),
         "this is a tést",
-        "Buffer to string should recover the string"
+        "Buffer to string should recover the string",
       );
     }
   },
@@ -143,7 +143,7 @@ Deno.test({
       assertEquals(
         buffer.toString(),
         "this is a tést",
-        "Buffer to string should recover the string"
+        "Buffer to string should recover the string",
       );
     }
   },
@@ -157,7 +157,7 @@ Deno.test({
       assertEquals(
         buffer.toString(encoding),
         "ZGVubyBsYW5k",
-        "Buffer to string should recover the string in base64"
+        "Buffer to string should recover the string in base64",
       );
     }
     const b64 = "dGhpcyBpcyBhIHTDqXN0";
@@ -173,7 +173,7 @@ Deno.test({
       assertEquals(
         buffer.toString(encoding),
         "64656e6f206c616e64",
-        "Buffer to string should recover the string"
+        "Buffer to string should recover the string",
       );
     }
     const hex = "64656e6f206c616e64";
@@ -196,7 +196,7 @@ Deno.test({
         },
         TypeError,
         `Unkown encoding: ${encoding}`,
-        "Should throw on invalid encoding"
+        "Should throw on invalid encoding",
       );
     }
   },
@@ -222,7 +222,7 @@ Deno.test({
           Buffer.from("yes", encoding);
         },
         TypeError,
-        `Unkown encoding: ${encoding}`
+        `Unkown encoding: ${encoding}`,
       );
     }
   },
@@ -243,7 +243,7 @@ Deno.test({
         },
         Error,
         `"${encoding}" encoding`,
-        "Should throw on invalid encoding"
+        "Should throw on invalid encoding",
       );
 
       assertThrows(
@@ -254,7 +254,7 @@ Deno.test({
         },
         Error,
         `"${encoding}" encoding`,
-        "Should throw on invalid encoding"
+        "Should throw on invalid encoding",
       );
     }
   },
@@ -268,7 +268,7 @@ Deno.test({
     assertEquals(
       buffer.toString(),
       "test",
-      "Buffer to string should recover the string"
+      "Buffer to string should recover the string",
     );
   },
 });

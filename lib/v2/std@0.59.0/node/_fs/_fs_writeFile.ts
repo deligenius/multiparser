@@ -16,7 +16,7 @@ export function writeFile(
   pathOrRid: string | number | URL,
   data: string | Uint8Array,
   optOrCallback: Encodings | CallbackWithError | WriteFileOptions | undefined,
-  callback?: CallbackWithError
+  callback?: CallbackWithError,
 ): void {
   const callbackFn: CallbackWithError | undefined =
     optOrCallback instanceof Function ? optOrCallback : callback;
@@ -40,8 +40,9 @@ export function writeFile(
   const encoding = checkEncoding(getEncoding(options)) || "utf8";
   const openOptions = getOpenOptions(flag || "w");
 
-  if (typeof data === "string" && encoding === "utf8")
+  if (typeof data === "string" && encoding === "utf8") {
     data = new TextEncoder().encode(data) as Uint8Array;
+  }
 
   const isRid = typeof pathOrRid === "number";
   let file;
@@ -72,7 +73,7 @@ export function writeFile(
 export function writeFileSync(
   pathOrRid: string | number | URL,
   data: string | Uint8Array,
-  options?: Encodings | WriteFileOptions
+  options?: Encodings | WriteFileOptions,
 ): void {
   pathOrRid = pathOrRid instanceof URL ? fromFileUrl(pathOrRid) : pathOrRid;
 
@@ -87,8 +88,9 @@ export function writeFileSync(
   const encoding = checkEncoding(getEncoding(options)) || "utf8";
   const openOptions = getOpenOptions(flag || "w");
 
-  if (typeof data === "string" && encoding === "utf8")
+  if (typeof data === "string" && encoding === "utf8") {
     data = new TextEncoder().encode(data) as Uint8Array;
+  }
 
   const isRid = typeof pathOrRid === "number";
   let file;

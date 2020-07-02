@@ -54,9 +54,11 @@ function buildMessage(diffResult: ReadonlyArray<DiffResult<string>>): string[] {
   messages.push("");
   messages.push("");
   messages.push(
-    `    ${gray(bold("[Diff]"))} ${red(bold("Actual"))} / ${green(
-      bold("Expected")
-    )}`
+    `    ${gray(bold("[Diff]"))} ${red(bold("Actual"))} / ${
+      green(
+        bold("Expected"),
+      )
+    }`,
   );
   messages.push("");
   messages.push("");
@@ -147,7 +149,7 @@ export function assert(expr: unknown, msg = ""): asserts expr {
 export function assertEquals(
   actual: unknown,
   expected: unknown,
-  msg?: string
+  msg?: string,
 ): void {
   if (equal(actual, expected)) {
     return;
@@ -158,7 +160,7 @@ export function assertEquals(
   try {
     const diffResult = diff(
       actualString.split("\n"),
-      expectedString.split("\n")
+      expectedString.split("\n"),
     );
     const diffMsg = buildMessage(diffResult).join("\n");
     message = `Values are not equal:\n${diffMsg}`;
@@ -178,7 +180,7 @@ export function assertEquals(
 export function assertNotEquals(
   actual: unknown,
   expected: unknown,
-  msg?: string
+  msg?: string,
 ): void {
   if (!equal(actual, expected)) {
     return;
@@ -208,7 +210,7 @@ export function assertNotEquals(
 export function assertStrictEquals(
   actual: unknown,
   expected: unknown,
-  msg?: string
+  msg?: string,
 ): void {
   if (actual === expected) {
     return;
@@ -227,14 +229,17 @@ export function assertStrictEquals(
         .split("\n")
         .map((l) => `     ${l}`)
         .join("\n");
-      message = `Values have the same structure but are not reference-equal:\n\n${red(
-        withOffset
-      )}\n`;
+      message =
+        `Values have the same structure but are not reference-equal:\n\n${
+          red(
+            withOffset,
+          )
+        }\n`;
     } else {
       try {
         const diffResult = diff(
           actualString.split("\n"),
-          expectedString.split("\n")
+          expectedString.split("\n"),
         );
         const diffMsg = buildMessage(diffResult).join("\n");
         message = `Values are not strictly equal:\n${diffMsg}`;
@@ -254,7 +259,7 @@ export function assertStrictEquals(
 export function assertStringContains(
   actual: string,
   expected: string,
-  msg?: string
+  msg?: string,
 ): void {
   if (!actual.includes(expected)) {
     if (!msg) {
@@ -271,7 +276,7 @@ export function assertStringContains(
 export function assertArrayContains(
   actual: ArrayLike<unknown>,
   expected: ArrayLike<unknown>,
-  msg?: string
+  msg?: string,
 ): void {
   const missing: unknown[] = [];
   for (let i = 0; i < expected.length; i++) {
@@ -290,9 +295,11 @@ export function assertArrayContains(
     return;
   }
   if (!msg) {
-    msg = `actual: "${format(actual)}" expected to contain: "${format(
-      expected
-    )}"\nmissing: ${format(missing)}`;
+    msg = `actual: "${format(actual)}" expected to contain: "${
+      format(
+        expected,
+      )
+    }"\nmissing: ${format(missing)}`;
   }
   throw new AssertionError(msg);
 }
@@ -304,7 +311,7 @@ export function assertArrayContains(
 export function assertMatch(
   actual: string,
   expected: RegExp,
-  msg?: string
+  msg?: string,
 ): void {
   if (!expected.test(actual)) {
     if (!msg) {
@@ -331,7 +338,7 @@ export function assertThrows<T = void>(
   fn: () => T,
   ErrorClass?: Constructor,
   msgIncludes = "",
-  msg?: string
+  msg?: string,
 ): Error {
   let doesThrow = false;
   let error = null;
@@ -342,18 +349,20 @@ export function assertThrows<T = void>(
       throw new AssertionError("A non-Error object was thrown.");
     }
     if (ErrorClass && !(Object.getPrototypeOf(e) === ErrorClass.prototype)) {
-      msg = `Expected error to be instance of "${ErrorClass.name}", but was "${
-        e.constructor.name
-      }"${msg ? `: ${msg}` : "."}`;
+      msg =
+        `Expected error to be instance of "${ErrorClass.name}", but was "${e.constructor.name}"${
+          msg ? `: ${msg}` : "."
+        }`;
       throw new AssertionError(msg);
     }
     if (
       msgIncludes &&
       !stripColor(e.message).includes(stripColor(msgIncludes))
     ) {
-      msg = `Expected error message to include "${msgIncludes}", but got "${
-        e.message
-      }"${msg ? `: ${msg}` : "."}`;
+      msg =
+        `Expected error message to include "${msgIncludes}", but got "${e.message}"${
+          msg ? `: ${msg}` : "."
+        }`;
       throw new AssertionError(msg);
     }
     doesThrow = true;
@@ -375,7 +384,7 @@ export async function assertThrowsAsync<T = void>(
   fn: () => Promise<T>,
   ErrorClass?: Constructor,
   msgIncludes = "",
-  msg?: string
+  msg?: string,
 ): Promise<Error> {
   let doesThrow = false;
   let error = null;
@@ -386,18 +395,20 @@ export async function assertThrowsAsync<T = void>(
       throw new AssertionError("A non-Error object was thrown or rejected.");
     }
     if (ErrorClass && !(Object.getPrototypeOf(e) === ErrorClass.prototype)) {
-      msg = `Expected error to be instance of "${ErrorClass.name}", but got "${
-        e.name
-      }"${msg ? `: ${msg}` : "."}`;
+      msg =
+        `Expected error to be instance of "${ErrorClass.name}", but got "${e.name}"${
+          msg ? `: ${msg}` : "."
+        }`;
       throw new AssertionError(msg);
     }
     if (
       msgIncludes &&
       !stripColor(e.message).includes(stripColor(msgIncludes))
     ) {
-      msg = `Expected error message to include "${msgIncludes}", but got "${
-        e.message
-      }"${msg ? `: ${msg}` : "."}`;
+      msg =
+        `Expected error message to include "${msgIncludes}", but got "${e.message}"${
+          msg ? `: ${msg}` : "."
+        }`;
       throw new AssertionError(msg);
     }
     doesThrow = true;

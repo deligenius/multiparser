@@ -54,7 +54,7 @@ export type DateTimeFormat =
  */
 export function parseDateTime(
   datetimeStr: string,
-  format: DateTimeFormat
+  format: DateTimeFormat,
 ): Date {
   let m, d, y, ho, mi: string;
   let datePattern: RegExp;
@@ -98,8 +98,7 @@ export function parseDateTime(
 export function dayOfYear(date: Date): number {
   const dayMs = 1000 * 60 * 60 * 24;
   const yearStart = new Date(date.getFullYear(), 0, 0);
-  const diff =
-    date.getTime() -
+  const diff = date.getTime() -
     yearStart.getTime() +
     (yearStart.getTimezoneOffset() - date.getTimezoneOffset()) * 60 * 1000;
   return Math.floor(diff / dayMs);

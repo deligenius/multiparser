@@ -7,5 +7,8 @@ unlisted: false
 fmt: true
 repository: https://github.com/deligenius/multiparser
 files:
-  - ./**/*
+  - ./lib/multiParser.ts
+  - ./lib/multiParserV2.ts
+  - ./deps.ts
+  - ./mod.ts
   - ./README.md

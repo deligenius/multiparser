@@ -74,10 +74,9 @@ for (const method of methods) {
         fn() {
           const algorithm = new Sha1();
           algorithm.update(message);
-          const actual =
-            method === "hex"
-              ? algorithm[method]()
-              : toHexString(algorithm[method]());
+          const actual = method === "hex"
+            ? algorithm[method]()
+            : toHexString(algorithm[method]());
           assertEquals(actual, expected);
         },
       });
@@ -94,10 +93,9 @@ for (const method of methods) {
         fn() {
           const algorithm = new Sha1(true);
           algorithm.update(message);
-          const actual =
-            method === "hex"
-              ? algorithm[method]()
-              : toHexString(algorithm[method]());
+          const actual = method === "hex"
+            ? algorithm[method]()
+            : toHexString(algorithm[method]());
           assertEquals(actual, expected);
         },
       });

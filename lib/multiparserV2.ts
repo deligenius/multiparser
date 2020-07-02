@@ -63,8 +63,7 @@ function getForm(pieces: Uint8Array[]) {
         // headers = "field1"
         form.fields[headers] = decoder.decode(contentByte);
       }
-    }
-    // it's a file field
+    } // it's a file field
     else {
       let file: FormFile = {
         name: headers.name,
@@ -76,13 +75,11 @@ function getForm(pieces: Uint8Array[]) {
 
       // array of files
       if (form.files[headers.name] instanceof Array) {
-        (<FormFile[]>form.files[headers.name]).push(file);
-      }
-      // if file exists, convert it to array
+        (<FormFile[]> form.files[headers.name]).push(file);
+      } // if file exists, convert it to array
       else if (form.files[headers.name]) {
-        form.files[headers.name] = [<FormFile>form.files[headers.name], file];
-      }
-      // one file only
+        form.files[headers.name] = [<FormFile> form.files[headers.name], file];
+      } // one file only
       else {
         form.files[headers.name] = file;
       }
@@ -97,8 +94,7 @@ function getHeaders(headerByte: Uint8Array) {
   // no contentType, it may be a string field, return name only
   if (contentTypeIndex < 0) {
     return getNameOnly(headerByte);
-  }
-  // file field, return with name, filename and contentType
+  } // file field, return with name, filename and contentType
   else {
     return getHeaderNContentType(headerByte, contentTypeIndex);
   }
@@ -106,7 +102,7 @@ function getHeaders(headerByte: Uint8Array) {
 
 function getHeaderNContentType(
   headerByte: Uint8Array,
-  contentTypeIndex: number
+  contentTypeIndex: number,
 ) {
   let headers: Record<string, string> = {};
 
@@ -115,7 +111,7 @@ function getHeaderNContentType(
 
   // jump over <Content-Type: >
   let contentTypeByte = headerByte.slice(
-    contentTypeIndex + encode.contentType.byteLength + 2
+    contentTypeIndex + encode.contentType.byteLength + 2,
   );
 
   headers.contentType = decoder.decode(contentTypeByte);
@@ -139,7 +135,7 @@ function getNameNFilename(headerLineByte: Uint8Array, filenameIndex: number) {
   let nameByte = headerLineByte.slice(0, filenameIndex - 2);
   let filenameByte = headerLineByte.slice(
     filenameIndex + encode.filename.byteLength + 2,
-    headerLineByte.byteLength - 1
+    headerLineByte.byteLength - 1,
   );
 
   let name = getNameOnly(nameByte);
@@ -152,7 +148,7 @@ function getNameOnly(headerLineByte: Uint8Array) {
   // jump <name="> and get string inside double quote => "string"
   let nameByte = headerLineByte.slice(
     nameIndex + encode.name.byteLength + 2,
-    headerLineByte.byteLength - 1
+    headerLineByte.byteLength - 1,
   );
   return decoder.decode(nameByte);
 }
@@ -189,7 +185,7 @@ function getBoundary(contentType: string): Uint8Array | undefined {
   if (boundaryIndex >= 0) {
     // jump over 'boundary=' to get the real boundary
     let boundary = contentTypeByte.slice(
-      boundaryIndex + encode.boundaryEqual.byteLength
+      boundaryIndex + encode.boundaryEqual.byteLength,
     );
     return boundary;
   } else {

@@ -48,9 +48,9 @@ testCopy(
     await assertThrowsAsync(
       async (): Promise<void> => {
         await copy(srcFile, destFile);
-      }
+      },
     );
-  }
+  },
 );
 
 testCopy(
@@ -63,9 +63,9 @@ testCopy(
         await copy(srcFile, destFile);
       },
       Error,
-      "Source and destination cannot be the same."
+      "Source and destination cannot be the same.",
     );
-  }
+  },
 );
 
 testCopy(
@@ -79,12 +79,12 @@ testCopy(
     assertEquals(
       await exists(srcFile),
       true,
-      `source should exist before copy`
+      `source should exist before copy`,
     );
     assertEquals(
       await exists(destFile),
       false,
-      "destination should not exist before copy"
+      "destination should not exist before copy",
     );
 
     await copy(srcFile, destFile);
@@ -93,7 +93,7 @@ testCopy(
     assertEquals(
       await exists(destFile),
       true,
-      "destination should exist before copy"
+      "destination should exist before copy",
     );
 
     const destContent = new TextDecoder().decode(await Deno.readFile(destFile));
@@ -101,7 +101,7 @@ testCopy(
     assertEquals(
       srcContent,
       destContent,
-      "source and destination should have the same content"
+      "source and destination should have the same content",
     );
 
     // Copy again and it should throw an error.
@@ -110,7 +110,7 @@ testCopy(
         await copy(srcFile, destFile);
       },
       Error,
-      `'${destFile}' already exists.`
+      `'${destFile}' already exists.`,
     );
 
     // Modify destination file.
@@ -118,7 +118,7 @@ testCopy(
 
     assertEquals(
       new TextDecoder().decode(await Deno.readFile(destFile)),
-      "txt copy"
+      "txt copy",
     );
 
     // Copy again with overwrite option.
@@ -127,9 +127,9 @@ testCopy(
     // Make sure the file has been overwritten.
     assertEquals(
       new TextDecoder().decode(await Deno.readFile(destFile)),
-      "txt"
+      "txt",
     );
-  }
+  },
 );
 
 testCopy(
@@ -155,7 +155,7 @@ testCopy(
     assert(destStatInfo.mtime instanceof Date);
     assertEquals(destStatInfo.atime, srcStatInfo.atime);
     assertEquals(destStatInfo.mtime, srcStatInfo.mtime);
-  }
+  },
 );
 
 testCopy(
@@ -171,9 +171,9 @@ testCopy(
         await copy(srcDir, destDir);
       },
       Error,
-      `Cannot copy '${srcDir}' to a subdirectory of itself, '${destDir}'.`
+      `Cannot copy '${srcDir}' to a subdirectory of itself, '${destDir}'.`,
     );
-  }
+  },
 );
 
 testCopy(
@@ -190,9 +190,9 @@ testCopy(
         await copy(srcDir, destDir);
       },
       Error,
-      `Cannot overwrite non-directory '${destDir}' with directory '${srcDir}'.`
+      `Cannot overwrite non-directory '${destDir}' with directory '${srcDir}'.`,
     );
-  }
+  },
 );
 
 testCopy(
@@ -213,11 +213,11 @@ testCopy(
     // After copy. The source and destination should have the same content.
     assertEquals(
       new TextDecoder().decode(await Deno.readFile(srcFile)),
-      new TextDecoder().decode(await Deno.readFile(destFile))
+      new TextDecoder().decode(await Deno.readFile(destFile)),
     );
     assertEquals(
       new TextDecoder().decode(await Deno.readFile(srcNestFile)),
-      new TextDecoder().decode(await Deno.readFile(destNestFile))
+      new TextDecoder().decode(await Deno.readFile(destNestFile)),
     );
 
     // Copy again without overwrite option and it should throw an error.
@@ -226,14 +226,14 @@ testCopy(
         await copy(srcDir, destDir);
       },
       Error,
-      `'${destDir}' already exists.`
+      `'${destDir}' already exists.`,
     );
 
     // Modify the file in the destination directory.
     await Deno.writeFile(destNestFile, new TextEncoder().encode("nest copy"));
     assertEquals(
       new TextDecoder().decode(await Deno.readFile(destNestFile)),
-      "nest copy"
+      "nest copy",
     );
 
     // Copy again with overwrite option.
@@ -242,9 +242,9 @@ testCopy(
     // Make sure the file has been overwritten.
     assertEquals(
       new TextDecoder().decode(await Deno.readFile(destNestFile)),
-      "nest"
+      "nest",
     );
-  }
+  },
 );
 
 testCopy(
@@ -256,7 +256,7 @@ testCopy(
 
     assert(
       (await Deno.lstat(srcLink)).isSymlink,
-      `'${srcLink}' should be symlink type`
+      `'${srcLink}' should be symlink type`,
     );
 
     await copy(srcLink, destLink);
@@ -264,7 +264,7 @@ testCopy(
     const statInfo = await Deno.lstat(destLink);
 
     assert(statInfo.isSymlink, `'${destLink}' should be symlink type`);
-  }
+  },
 );
 
 testCopy(
@@ -278,7 +278,7 @@ testCopy(
 
     assert(
       (await Deno.lstat(srcLink)).isSymlink,
-      `'${srcLink}' should be symlink type`
+      `'${srcLink}' should be symlink type`,
     );
 
     await copy(srcLink, destLink);
@@ -286,7 +286,7 @@ testCopy(
     const statInfo = await Deno.lstat(destLink);
 
     assert(statInfo.isSymlink);
-  }
+  },
 );
 
 testCopySync(
@@ -297,7 +297,7 @@ testCopySync(
     assertThrows((): void => {
       copySync(srcFile, destFile);
     });
-  }
+  },
 );
 
 testCopySync(
@@ -325,7 +325,7 @@ testCopySync(
     // is fixed
     // assertEquals(destStatInfo.atime, srcStatInfo.atime);
     // assertEquals(destStatInfo.mtime, srcStatInfo.mtime);
-  }
+  },
 );
 
 testCopySync(
@@ -337,9 +337,9 @@ testCopySync(
         copySync(srcFile, srcFile);
       },
       Error,
-      "Source and destination cannot be the same."
+      "Source and destination cannot be the same.",
     );
-  }
+  },
 );
 
 testCopySync("[fs] copy file synchronously", (tempDir: string): void => {
@@ -366,7 +366,7 @@ testCopySync("[fs] copy file synchronously", (tempDir: string): void => {
       copySync(srcFile, destFile);
     },
     Error,
-    `'${destFile}' already exists.`
+    `'${destFile}' already exists.`,
   );
 
   // Modify destination file.
@@ -374,7 +374,7 @@ testCopySync("[fs] copy file synchronously", (tempDir: string): void => {
 
   assertEquals(
     new TextDecoder().decode(Deno.readFileSync(destFile)),
-    "txt copy"
+    "txt copy",
   );
 
   // Copy again with overwrite option.
@@ -397,9 +397,9 @@ testCopySync(
         copySync(srcDir, destDir);
       },
       Error,
-      `Cannot copy '${srcDir}' to a subdirectory of itself, '${destDir}'.`
+      `Cannot copy '${srcDir}' to a subdirectory of itself, '${destDir}'.`,
     );
-  }
+  },
 );
 
 testCopySync(
@@ -417,9 +417,9 @@ testCopySync(
         copySync(srcDir, destDir);
       },
       Error,
-      `Cannot overwrite non-directory '${destDir}' with directory '${srcDir}'.`
+      `Cannot overwrite non-directory '${destDir}' with directory '${srcDir}'.`,
     );
-  }
+  },
 );
 
 testCopySync("[fs] copy directory synchronously", (tempDir: string): void => {
@@ -438,11 +438,11 @@ testCopySync("[fs] copy directory synchronously", (tempDir: string): void => {
   // After copy. The source and destination should have the same content.
   assertEquals(
     new TextDecoder().decode(Deno.readFileSync(srcFile)),
-    new TextDecoder().decode(Deno.readFileSync(destFile))
+    new TextDecoder().decode(Deno.readFileSync(destFile)),
   );
   assertEquals(
     new TextDecoder().decode(Deno.readFileSync(srcNestFile)),
-    new TextDecoder().decode(Deno.readFileSync(destNestFile))
+    new TextDecoder().decode(Deno.readFileSync(destNestFile)),
   );
 
   // Copy again without overwrite option and it should throw an error.
@@ -451,14 +451,14 @@ testCopySync("[fs] copy directory synchronously", (tempDir: string): void => {
       copySync(srcDir, destDir);
     },
     Error,
-    `'${destDir}' already exists.`
+    `'${destDir}' already exists.`,
   );
 
   // Modify the file in the destination directory.
   Deno.writeFileSync(destNestFile, new TextEncoder().encode("nest copy"));
   assertEquals(
     new TextDecoder().decode(Deno.readFileSync(destNestFile)),
-    "nest copy"
+    "nest copy",
   );
 
   // Copy again with overwrite option.
@@ -467,7 +467,7 @@ testCopySync("[fs] copy directory synchronously", (tempDir: string): void => {
   // Make sure the file has been overwritten.
   assertEquals(
     new TextDecoder().decode(Deno.readFileSync(destNestFile)),
-    "nest"
+    "nest",
   );
 });
 
@@ -480,7 +480,7 @@ testCopySync(
 
     assert(
       Deno.lstatSync(srcLink).isSymlink,
-      `'${srcLink}' should be symlink type`
+      `'${srcLink}' should be symlink type`,
     );
 
     copySync(srcLink, destLink);
@@ -488,7 +488,7 @@ testCopySync(
     const statInfo = Deno.lstatSync(destLink);
 
     assert(statInfo.isSymlink, `'${destLink}' should be symlink type`);
-  }
+  },
 );
 
 testCopySync(
@@ -502,7 +502,7 @@ testCopySync(
 
     assert(
       Deno.lstatSync(srcLink).isSymlink,
-      `'${srcLink}' should be symlink type`
+      `'${srcLink}' should be symlink type`,
     );
 
     copySync(srcLink, destLink);
@@ -510,5 +510,5 @@ testCopySync(
     const statInfo = Deno.lstatSync(destLink);
 
     assert(statInfo.isSymlink);
-  }
+  },
 );

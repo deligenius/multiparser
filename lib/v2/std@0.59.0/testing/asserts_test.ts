@@ -28,14 +28,14 @@ Deno.test("testingEqual", function (): void {
   assert(
     equal(
       { hello: "world", hi: { there: "everyone" } },
-      { hello: "world", hi: { there: "everyone" } }
-    )
+      { hello: "world", hi: { there: "everyone" } },
+    ),
   );
   assert(
     !equal(
       { hello: "world", hi: { there: "everyone" } },
-      { hello: "world", hi: { there: "everyone else" } }
-    )
+      { hello: "world", hi: { there: "everyone else" } },
+    ),
   );
   assert(equal(/deno/, /deno/));
   assert(!equal(/deno/, /node/));
@@ -58,20 +58,20 @@ Deno.test("testingEqual", function (): void {
       new Map([
         ["foo", "bar"],
         ["baz", "baz"],
-      ])
-    )
+      ]),
+    ),
   );
   assert(
     equal(
       new Map([["foo", new Map([["bar", "baz"]])]]),
-      new Map([["foo", new Map([["bar", "baz"]])]])
-    )
+      new Map([["foo", new Map([["bar", "baz"]])]]),
+    ),
   );
   assert(
     equal(
       new Map([["foo", { bar: "baz" }]]),
-      new Map([["foo", { bar: "baz" }]])
-    )
+      new Map([["foo", { bar: "baz" }]]),
+    ),
   );
   assert(
     equal(
@@ -82,8 +82,8 @@ Deno.test("testingEqual", function (): void {
       new Map([
         ["baz", "qux"],
         ["foo", "bar"],
-      ])
-    )
+      ]),
+    ),
   );
   assert(equal(new Map([["foo", ["bar"]]]), new Map([["foo", ["bar"]]])));
   assert(!equal(new Map([["foo", "bar"]]), new Map([["bar", "baz"]])));
@@ -93,14 +93,14 @@ Deno.test("testingEqual", function (): void {
       new Map([
         ["foo", "bar"],
         ["bar", "baz"],
-      ])
-    )
+      ]),
+    ),
   );
   assert(
     !equal(
       new Map([["foo", new Map([["bar", "baz"]])]]),
-      new Map([["foo", new Map([["bar", "qux"]])]])
-    )
+      new Map([["foo", new Map([["bar", "qux"]])]]),
+    ),
   );
   assert(equal(new Map([[{ x: 1 }, true]]), new Map([[{ x: 1 }, true]])));
   assert(!equal(new Map([[{ x: 1 }, true]]), new Map([[{ x: 1 }, false]])));
@@ -113,13 +113,13 @@ Deno.test("testingEqual", function (): void {
   assert(equal(new Uint8Array([1, 2, 3, 4]), new Uint8Array([1, 2, 3, 4])));
   assert(!equal(new Uint8Array([1, 2, 3, 4]), new Uint8Array([2, 1, 4, 3])));
   assert(
-    equal(new URL("https://example.test"), new URL("https://example.test"))
+    equal(new URL("https://example.test"), new URL("https://example.test")),
   );
   assert(
     !equal(
       new URL("https://example.test"),
-      new URL("https://example.test/with-path")
-    )
+      new URL("https://example.test/with-path"),
+    ),
   );
 });
 
@@ -161,12 +161,12 @@ Deno.test("testingArrayContains", function (): void {
   assertArrayContains(fixtureObject, [{ deno: "luv" }]);
   assertArrayContains(
     Uint8Array.from([1, 2, 3, 4]),
-    Uint8Array.from([1, 2, 3])
+    Uint8Array.from([1, 2, 3]),
   );
   assertThrows(
     (): void => assertArrayContains(fixtureObject, [{ deno: "node" }]),
     AssertionError,
-    `actual: "[ { deno: "luv" }, { deno: "Js" } ]" expected to contain: "[ { deno: "node" } ]"\nmissing: [ { deno: "node" } ]`
+    `actual: "[ { deno: "luv" }, { deno: "Js" } ]" expected to contain: "[ { deno: "node" } ]"\nmissing: [ { deno: "node" } ]`,
   );
 });
 
@@ -177,7 +177,7 @@ Deno.test("testingAssertStringContainsThrow", function (): void {
   } catch (e) {
     assert(
       e.message ===
-        `actual: "Denosaurus from Jurassic" expected to contain: "Raptor"`
+        `actual: "Denosaurus from Jurassic" expected to contain: "Raptor"`,
     );
     assert(e instanceof AssertionError);
     didThrow = true;
@@ -196,7 +196,7 @@ Deno.test("testingAssertStringMatchingThrows", function (): void {
   } catch (e) {
     assert(
       e.message ===
-        `actual: "Denosaurus from Jurassic" expected to match: "/Raptor/"`
+        `actual: "Denosaurus from Jurassic" expected to match: "/Raptor/"`,
     );
     assert(e instanceof AssertionError);
     didThrow = true;
@@ -235,7 +235,7 @@ Deno.test("testingAssertFail", function (): void {
       fail("foo");
     },
     AssertionError,
-    "Failed assertion: foo"
+    "Failed assertion: foo",
   );
 });
 
@@ -249,11 +249,11 @@ Deno.test("testingAssertFailWithWrongErrorClass", function (): void {
           fail("foo");
         },
         Error,
-        "Failed assertion: foo"
+        "Failed assertion: foo",
       );
     },
     AssertionError,
-    `Expected error to be instance of "Error", but was "AssertionError"`
+    `Expected error to be instance of "Error", but was "AssertionError"`,
   );
 });
 
@@ -272,9 +272,11 @@ Deno.test("testingAssertThrowsAsyncWithReturnType", () => {
 const createHeader = (): string[] => [
   "",
   "",
-  `    ${gray(bold("[Diff]"))} ${red(bold("Actual"))} / ${green(
-    bold("Expected")
-  )}`,
+  `    ${gray(bold("[Diff]"))} ${red(bold("Actual"))} / ${
+    green(
+      bold("Expected"),
+    )
+  }`,
   "",
   "",
 ];
@@ -305,7 +307,7 @@ Deno.test({
         removed(`-   ${yellow("1")}`),
         added(`+   ${yellow("2")}`),
         "",
-      ].join("\n")
+      ].join("\n"),
     );
   },
 });
@@ -321,7 +323,7 @@ Deno.test({
         ...createHeader(),
         removed(`-   ${yellow("1")}`),
         added(`+   "1"`),
-      ].join("\n")
+      ].join("\n"),
     );
   },
 });
@@ -338,7 +340,7 @@ Deno.test({
         removed(`-   [ ${yellow("1")}, ${green('"2"')}, ${yellow("3")} ]`),
         added(`+   [ ${green('"1"')}, ${green('"2"')}, ${yellow("3")} ]`),
         "",
-      ].join("\n")
+      ].join("\n"),
     );
   },
 });
@@ -353,13 +355,13 @@ Deno.test({
         "Values are not equal:",
         ...createHeader(),
         removed(
-          `-   { a: ${yellow("1")}, b: ${green('"2"')}, c: ${yellow("3")} }`
+          `-   { a: ${yellow("1")}, b: ${green('"2"')}, c: ${yellow("3")} }`,
         ),
         added(
-          `+   { a: ${yellow("1")}, b: ${yellow("2")}, c: [ ${yellow("3")} ] }`
+          `+   { a: ${yellow("1")}, b: ${yellow("2")}, c: [ ${yellow("3")} ] }`,
         ),
         "",
-      ].join("\n")
+      ].join("\n"),
     );
   },
 });
@@ -393,7 +395,7 @@ Deno.test({
         removed(`-   { a: ${yellow("1")}, b: ${yellow("2")} }`),
         added(`+   { a: ${yellow("1")}, c: [ ${yellow("3")} ] }`),
         "",
-      ].join("\n")
+      ].join("\n"),
     );
   },
 });
@@ -407,7 +409,7 @@ Deno.test({
       [
         "Values have the same structure but are not reference-equal:\n",
         red(`     { a: ${yellow("1")}, b: ${yellow("2")} }`),
-      ].join("\n")
+      ].join("\n"),
     );
   },
 });
@@ -420,11 +422,11 @@ Deno.test("Assert Throws Non-Error Fail", () => {
           throw "Panic!";
         },
         String,
-        "Panic!"
+        "Panic!",
       );
     },
     AssertionError,
-    "A non-Error object was thrown."
+    "A non-Error object was thrown.",
   );
 
   assertThrows(
@@ -434,7 +436,7 @@ Deno.test("Assert Throws Non-Error Fail", () => {
       });
     },
     AssertionError,
-    "A non-Error object was thrown."
+    "A non-Error object was thrown.",
   );
 
   assertThrows(
@@ -444,7 +446,7 @@ Deno.test("Assert Throws Non-Error Fail", () => {
       });
     },
     AssertionError,
-    "A non-Error object was thrown."
+    "A non-Error object was thrown.",
   );
 });
 
@@ -456,11 +458,11 @@ Deno.test("Assert Throws Async Non-Error Fail", () => {
           return Promise.reject("Panic!");
         },
         String,
-        "Panic!"
+        "Panic!",
       );
     },
     AssertionError,
-    "A non-Error object was thrown or rejected."
+    "A non-Error object was thrown or rejected.",
   );
 
   assertThrowsAsync(
@@ -470,7 +472,7 @@ Deno.test("Assert Throws Async Non-Error Fail", () => {
       });
     },
     AssertionError,
-    "A non-Error object was thrown or rejected."
+    "A non-Error object was thrown or rejected.",
   );
 
   assertThrowsAsync(
@@ -480,7 +482,7 @@ Deno.test("Assert Throws Async Non-Error Fail", () => {
       });
     },
     AssertionError,
-    "A non-Error object was thrown or rejected."
+    "A non-Error object was thrown or rejected.",
   );
 
   assertThrowsAsync(
@@ -490,6 +492,6 @@ Deno.test("Assert Throws Async Non-Error Fail", () => {
       });
     },
     AssertionError,
-    "A non-Error object was thrown or rejected."
+    "A non-Error object was thrown or rejected.",
   );
 });

@@ -27,7 +27,10 @@ export interface Form {
 
 // TODO: provide options
 export async function multiParser(req: ServerRequest, option?: any) {
-  if (req.headers.has("content-type")) {
+  if (
+    req.headers.has("content-type") &&
+    req.headers.get("content-type")?.startsWith("multipart/form-data")
+  ) {
     let buf = await Deno.readAll(req.body);
 
     let boundaryByte = getBoundary(req.headers.get("content-type") as string);

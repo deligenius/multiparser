@@ -1,6 +1,6 @@
 name: multiparser
 description: A Deno module for parsing multipart/form-data
-version: 1.0.0
+version: 1.0.1
 entry: ./mod.ts
 stable: true
 unlisted: false

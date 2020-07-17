@@ -17,7 +17,7 @@
 
 ### Why V2?
 
-Multiparser version 2 is aim to have better performance than V1. Since V1 is dependent on deno@std, which is very unstable. So Multiparser V2 has no dependencies, and it's much faster!
+Multiparser version 2 aims to have better performance than V1. Since V1 is dependent on deno@std, which is very unstable. So Multiparser V2 has no dependencies, and it's much faster!
 
 ### Usage
 ```ts

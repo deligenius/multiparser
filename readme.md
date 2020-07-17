@@ -32,7 +32,7 @@ Where:
 
 Result: 
   - success, return `Form`
-  - failed, return `undefined`
+  - fail, return `undefined`
 
 Form Definition:
 

@@ -24,7 +24,7 @@ Multiparser version 2 is aim to have better performance than V1. Since V1 is dep
 // multiParser
 import { multiParserV2, FormV2, FormFileV2 } from 'https://deno.land/x/multiparser@v2.0.0/mod.ts'
 
-const form = await multiParserV2(request, maxMem?)
+const form = await multiParserV2(request)
 ```
 Where: 
 

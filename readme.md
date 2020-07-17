@@ -26,15 +26,15 @@ import { multiParserV2, FormV2, FormFileV2 } from 'https://deno.land/x/multipars
 
 const form = await multiParserV2(request)
 ```
-Where: 
+**Where**: 
 
   ```request: serverRequest``` is a raw server request coming from Deno http module.
 
-Result: 
+**Result**: 
   - success, return `Form`
   - fail, return `undefined`
 
-Form Definition:
+**`Form` Definition**:
 
 ```ts
 interface Form {
@@ -43,7 +43,7 @@ interface Form {
 }
 ```
 
-Basic Example: 
+### Basic Example: 
 
 Suppose your form has two fields, the first one has field name `singleStr` with text "this is string value" only, and the second field called `singleImg` with a img file named "singleImg.png". 
 

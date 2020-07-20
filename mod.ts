@@ -6,6 +6,4 @@ export {
   multiParser as multiParserV2,
 } from "./lib/multiParserV2.ts";
 
-export { FormFile } from "https://deno.land/std@0.59.0/mime/multipart.ts";
-
-
+export { FormFile } from "https://deno.land/std@0.61.0/mime/multipart.ts";

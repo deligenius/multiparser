@@ -2,7 +2,7 @@
 
 > A Deno module for parsing multipart/form-data
 
-[![tag](https://img.shields.io/badge/Deno%20-std%400.59.0-333?&logo=Deno)](https://deno.land/std@0.59.0)
+[![tag](https://img.shields.io/badge/Deno%20-std%400.61.0-333?&logo=Deno)](https://deno.land/std@0.61.0)
 [![nest badge](https://nest.land/badge.svg)](https://nest.land/package/multiparser)
 
 ***Note: Multiparser V2 is out!***
@@ -22,7 +22,7 @@ Multiparser version 2 aims to have better performance than V1. Since V1 is depen
 ### Usage
 ```ts
 // multiParser
-import { multiParserV2, FormV2, FormFileV2 } from 'https://deno.land/x/multiparser@v2.0.0/mod.ts'
+import { multiParserV2, FormV2, FormFileV2 } from 'https://deno.land/x/multiparser@v2.0.1/mod.ts'
 
 const form = await multiParserV2(request)
 ```
@@ -48,8 +48,8 @@ interface Form {
 Suppose your form has two fields, the first one has field name `singleStr` with text "this is string value" only, and the second field called `singleImg` with a img file named "singleImg.png". 
 
 ```ts
-import { serve } from "https://deno.land/std@0.59.0/http/server.ts";
-import { multiParser } from 'https://deno.land/x/multiparser@v2.0.0/mod.ts'
+import { serve } from "https://deno.land/std@0.61.0/http/server.ts";
+import { multiParser } from 'https://deno.land/x/multiparser@v2.0.1/mod.ts'
 
 const s = serve({ port: 8000 });
 for await (const req of s) {
@@ -153,8 +153,8 @@ The `content` can be used to write file content to local disk by using `Deno.wri
 ### With Deno http module
 
 ```ts
-import { serve } from "https://deno.land/std@0.59.0/http/server.ts";
-import { multiParser } from 'https://deno.land/x/multiparser@v2.0.0/mod.ts'
+import { serve } from "https://deno.land/std@0.61.0/http/server.ts";
+import { multiParser } from 'https://deno.land/x/multiparser@v2.0.1/mod.ts'
 
 const s = serve({ port: 8000 });
 for await (const req of s) {
@@ -181,7 +181,7 @@ for await (const req of s) {
 ### With Oak framework
 ```ts
 import { Application, Context } from "https://deno.land/x/oak@6.0.0/mod.ts";
-import { multiParser } from 'https://deno.land/x/multiparser@v2.0.0/mod.ts'
+import { multiParser } from 'https://deno.land/x/multiparser@v2.0.1/mod.ts'
 
 const app = new Application();
 

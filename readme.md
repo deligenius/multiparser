@@ -25,6 +25,7 @@ Multiparser version 2 aims to have better performance than V1. Since V1 is depen
 import { multiParserV2, FormV2, FormFileV2 } from 'https://deno.land/x/multiparser@v2.0.1/mod.ts'
 
 const form = await multiParserV2(request)
+
 ```
 **Where**: 
 
@@ -39,7 +40,7 @@ const form = await multiParserV2(request)
 ```ts
 interface Form {
   fields: Record<string, string>;
-  files: Record<string, FormFile | FormFile[]>;
+  files: Record<string, FormFileV2 | FormFileV2[]>;
 }
 ```
 
@@ -91,6 +92,11 @@ form = {
   }
 }
 
+```
+Some times you may have multiple files in a field, the best practice is to cast it as an array `FormFileV2[]`
+```ts
+import { FormFileV2 } from "https://deno.land/x/multiparser@v2.0.1/mod.ts";
+const multipleFiles = form.files.multipleFiles as FormFileV2[]
 ```
 
 

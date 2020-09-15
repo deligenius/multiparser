@@ -16,6 +16,7 @@ export function multiParser(
       // invalid header
       if (!match) {
         reject("multiParser: Invalid header");
+        return;
       }
 
       const formBoundary: string = match!.groups!.boundary;

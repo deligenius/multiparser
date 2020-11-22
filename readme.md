@@ -20,7 +20,7 @@ Multiparser version 2 aims to have better performance than V1. Since V1 is depen
 ### Usage
 ```ts
 // multiParser
-import { multiParserV2, FormV2, FormFileV2 } from 'https://deno.land/x/multiparser@v2.0.1/mod.ts'
+import { multiParser, Form, FormFile } from 'https://deno.land/x/multiparser@v2.0.3/mod.ts'
 
 const form = await multiParserV2(request)
 
@@ -38,7 +38,7 @@ const form = await multiParserV2(request)
 ```ts
 interface Form {
   fields: Record<string, string>;
-  files: Record<string, FormFileV2 | FormFileV2[]>;
+  files: Record<string, FormFile | FormFile[]>;
 }
 ```
 
@@ -48,7 +48,7 @@ Suppose your form has two fields, the first one has field name `singleStr` with 
 
 ```ts
 import { serve } from "https://deno.land/std@0.61.0/http/server.ts";
-import { multiParser } from 'https://deno.land/x/multiparser@v2.0.1/mod.ts'
+import { multiParser } from 'https://deno.land/x/multiparser@v2.0.3/mod.ts'
 
 const s = serve({ port: 8000 });
 for await (const req of s) {
@@ -93,7 +93,7 @@ form = {
 ```
 Some times you may have multiple files in a field, the best practice is to cast it as an array `FormFileV2[]`
 ```ts
-import { FormFile } from "https://deno.land/x/multiparser@v2.0.1/mod.ts";
+import { FormFile } from "https://deno.land/x/multiparser@v2.0.3/mod.ts";
 const multipleFiles = form.files.multipleFiles as FormFile[]
 ```
 
@@ -101,7 +101,7 @@ const multipleFiles = form.files.multipleFiles as FormFile[]
 ### With Oak framework
 ```ts
 import { Application, Context } from "https://deno.land/x/oak@6.0.0/mod.ts";
-import { multiParser } from 'https://deno.land/x/multiparser@v2.0.2/mod.ts'
+import { multiParser } from 'https://deno.land/x/multiparser@v2.0.3/mod.ts'
 
 const app = new Application();
 

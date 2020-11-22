@@ -27,7 +27,7 @@ export interface Form {
 }
 
 // TODO: provide options
-export async function multiParser(req: ServerRequest, option?: any) {
+export async function multiParser(req: ServerRequest | any, option?: any) {
   if (
     req.headers.has("content-type") &&
     req.headers.get("content-type")?.startsWith("multipart/form-data")

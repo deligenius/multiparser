@@ -18,7 +18,7 @@ Multiparser version 2 aims to have better performance than V1. Since V1 is depen
 ### Usage
 ```ts
 // multiParser
-import { multiParser, Form, FormFile } from 'https://deno.land/x/multiparser@v2.0.3/mod.ts'
+import { multiParser, Form, FormFile } from 'https://deno.land/x/multiparser@v2.1.0/mod.ts'
 
 const form = await multiParser(request)
 

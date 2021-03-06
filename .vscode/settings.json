@@ -1,3 +1,11 @@
 {
+  "workbench.colorCustomizations": {
+    "activityBar.background": "#5C110E",
+    "titleBar.activeBackground": "#811714",
+    "titleBar.activeForeground": "#FEFBFB"
+  },
+  "deno.path": "/home/gjuoun/.deno/bin/deno",
   "deno.enable": true,
+  "deno.lint": true,
+  "deno.unstable": true
 }

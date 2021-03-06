@@ -7,9 +7,18 @@
       "request": "launch",
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "deno",
-      "runtimeArgs": ["run", "--inspect-brk", "-A", "-r", "${file}"],
+      "runtimeArgs": ["run", "--inspect-brk", "-A", "./src/app.ts"],
       "port": 9229,
       "outputCapture": "std"
+    },
+    {
+      "name": "Attach",
+      "port": 9229,
+      "request": "attach",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "type": "pwa-node"
     }
   ]
 }

@@ -6,7 +6,7 @@ const decoder = new TextDecoder();
 const encode = {
   contentType: encoder.encode("Content-Type"),
   filename: encoder.encode("filename"),
-  name: encoder.encode("name"),
+  name: encoder.encode(`name="`),
   dashdash: encoder.encode("--"),
   boundaryEqual: encoder.encode("boundary="),
   returnNewline2: encoder.encode("\r\n\r\n"),
@@ -89,7 +89,7 @@ function getForm(pieces: Uint8Array[]) {
 }
 
 function getHeaders(headerByte: Uint8Array) {
-  let contentTypeIndex = bytes.findIndex(headerByte, encode.contentType);
+  let contentTypeIndex = bytes.indexOf(headerByte, encode.contentType);
 
   // no contentType, it may be a string field, return name only
   if (contentTypeIndex < 0) {
@@ -109,7 +109,7 @@ function getHeaderNContentType(
   let contentDispositionByte = headerByte.slice(0, contentTypeIndex - 2);
   headers = getHeaderOnly(contentDispositionByte);
 
-  // jump over <Content-Type: >
+  // jump over Content-Type: - e.g.: Content-Type: application/octet-stream'
   let contentTypeByte = headerByte.slice(
     contentTypeIndex + encode.contentType.byteLength + 2,
   );
@@ -121,7 +121,7 @@ function getHeaderNContentType(
 function getHeaderOnly(headerLineByte: Uint8Array) {
   let headers: Record<string, string> = {};
 
-  let filenameIndex = bytes.findIndex(headerLineByte, encode.filename);
+  let filenameIndex = bytes.indexOf(headerLineByte, encode.filename);
   if (filenameIndex < 0) {
     headers.name = getNameOnly(headerLineByte);
   } else {
@@ -144,17 +144,17 @@ function getNameNFilename(headerLineByte: Uint8Array, filenameIndex: number) {
 }
 
 function getNameOnly(headerLineByte: Uint8Array) {
-  let nameIndex = bytes.findIndex(headerLineByte, encode.name);
+  let nameIndex = bytes.indexOf(headerLineByte, encode.name);
   // jump <name="> and get string inside double quote => "string"
   let nameByte = headerLineByte.slice(
-    nameIndex + encode.name.byteLength + 2,
+    nameIndex + encode.name.byteLength ,
     headerLineByte.byteLength - 1,
   );
   return decoder.decode(nameByte);
 }
 
 function splitPiece(piece: Uint8Array) {
-  const contentIndex = bytes.findIndex(piece, encode.returnNewline2);
+  const contentIndex = bytes.indexOf(piece, encode.returnNewline2);
   const headerByte = piece.slice(0, contentIndex);
   const contentByte = piece.slice(contentIndex + 4);
 
@@ -167,10 +167,10 @@ function getFieldPieces(buf: Uint8Array, boundaryByte: Uint8Array) {
 
   const pieces = [];
 
-  while (!bytes.hasPrefix(buf, endBoundaryByte)) {
+  while (!bytes.startsWith(buf, endBoundaryByte)) {
     // jump over boundary + '\r\n'
     buf = buf.slice(startBoundaryByte.byteLength + 2);
-    let boundaryIndex = bytes.findIndex(buf, startBoundaryByte);
+    let boundaryIndex = bytes.indexOf(buf, startBoundaryByte);
     // get field content piece
     pieces.push(buf.slice(0, boundaryIndex - 1));
     buf = buf.slice(boundaryIndex);
@@ -181,7 +181,7 @@ function getFieldPieces(buf: Uint8Array, boundaryByte: Uint8Array) {
 
 function getBoundary(contentType: string): Uint8Array | undefined {
   let contentTypeByte = encoder.encode(contentType);
-  let boundaryIndex = bytes.findIndex(contentTypeByte, encode.boundaryEqual);
+  let boundaryIndex = bytes.indexOf(contentTypeByte, encode.boundaryEqual);
   if (boundaryIndex >= 0) {
     // jump over 'boundary=' to get the real boundary
     let boundary = contentTypeByte.slice(

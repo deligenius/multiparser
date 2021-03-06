@@ -92,8 +92,8 @@ form = {
 
 ### With Oak framework
 ```ts
-import { Application, Context } from "https://deno.land/x/oak@6.0.0/mod.ts";
-import { multiParser } from 'https://deno.land/x/multiparser@v2.0.3/mod.ts'
+import { Application, Context } from "https://deno.land/x/oak@6.5.0/mod.ts";
+import { multiParser } from 'https://deno.land/x/multiparser@v2.1.0/mod.ts'
 
 const app = new Application();
 

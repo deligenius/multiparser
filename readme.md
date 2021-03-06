@@ -2,10 +2,8 @@
 
 > A Deno module for parsing multipart/form-data
 
-[![tag](https://img.shields.io/badge/Deno%20-std%400.61.0-333?&logo=Deno)](https://deno.land/std@0.61.0)
-[![nest badge](https://nest.land/badge.svg)](https://nest.land/package/multiparser)
+[![tag](https://img.shields.io/badge/Deno%20-std%400.89.0-333?&logo=Deno)](https://deno.land/std@0.89.0)
 
-***Note: Multiparser V2 is out!***
 
 ### Features:
 
@@ -22,7 +20,7 @@ Multiparser version 2 aims to have better performance than V1. Since V1 is depen
 // multiParser
 import { multiParser, Form, FormFile } from 'https://deno.land/x/multiparser@v2.0.3/mod.ts'
 
-const form = await multiParserV2(request)
+const form = await multiParser(request)
 
 ```
 **Where**: 
@@ -47,8 +45,8 @@ interface Form {
 Suppose your form has two fields, the first one has field name `singleStr` with text "this is string value" only, and the second field called `singleImg` with a img file named "singleImg.png". 
 
 ```ts
-import { serve } from "https://deno.land/std@0.61.0/http/server.ts";
-import { multiParser } from 'https://deno.land/x/multiparser@v2.0.3/mod.ts'
+import { serve } from "https://deno.land/std@0.89.0/http/server.ts";
+import { multiParser } from 'https://deno.land/x/multiparser@v2.1.0/mod.ts'
 
 const s = serve({ port: 8000 });
 for await (const req of s) {
@@ -91,12 +89,6 @@ form = {
 }
 
 ```
-Some times you may have multiple files in a field, the best practice is to cast it as an array `FormFileV2[]`
-```ts
-import { FormFile } from "https://deno.land/x/multiparser@v2.0.3/mod.ts";
-const multipleFiles = form.files.multipleFiles as FormFile[]
-```
-
 
 ### With Oak framework
 ```ts

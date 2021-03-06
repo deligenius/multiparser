@@ -172,7 +172,7 @@ function getFieldPieces(buf: Uint8Array, boundaryByte: Uint8Array) {
     buf = buf.slice(startBoundaryByte.byteLength + 2);
     let boundaryIndex = bytes.indexOf(buf, startBoundaryByte);
     // get field content piece
-    pieces.push(buf.slice(0, boundaryIndex - 1));
+    pieces.push(buf.slice(0, boundaryIndex - 2)); // -2 means remove /r/n
     buf = buf.slice(boundaryIndex);
   }
 

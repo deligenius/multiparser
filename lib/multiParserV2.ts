@@ -1,4 +1,4 @@
-import { ServerRequest, bytes } from "../deps.ts";
+import { bytes, readAll } from "../deps.ts";
 
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
@@ -27,12 +27,12 @@ export interface Form {
 }
 
 // TODO: provide options
-export async function multiParser(req: ServerRequest | any, option?: any) {
+export async function multiParser(req: Request | any, option?: any) {
   if (
     req.headers.has("content-type") &&
     req.headers.get("content-type")?.startsWith("multipart/form-data")
   ) {
-    let buf = await Deno.readAll(req.body);
+    let buf = await readAll(req.body);
 
     let boundaryByte = getBoundary(req.headers.get("content-type") as string);
     if (!boundaryByte) {
@@ -147,7 +147,7 @@ function getNameOnly(headerLineByte: Uint8Array) {
   let nameIndex = bytes.indexOf(headerLineByte, encode.name);
   // jump <name="> and get string inside double quote => "string"
   let nameByte = headerLineByte.slice(
-    nameIndex + encode.name.byteLength ,
+    nameIndex + encode.name.byteLength,
     headerLineByte.byteLength - 1,
   );
   return decoder.decode(nameByte);

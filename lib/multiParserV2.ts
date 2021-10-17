@@ -1,4 +1,4 @@
-import { bytes, readAll } from "../deps.ts";
+import { bytes } from "../deps.ts";
 
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
@@ -27,12 +27,12 @@ export interface Form {
 }
 
 // TODO: provide options
-export async function multiParser(req: Request | any, option?: any) {
+export async function multiParser(req: Request, option?: any) {
   if (
     req.headers.has("content-type") &&
     req.headers.get("content-type")?.startsWith("multipart/form-data")
   ) {
-    let buf = await readAll(req.body);
+    let buf = new Uint8Array(await req.arrayBuffer());
 
     let boundaryByte = getBoundary(req.headers.get("content-type") as string);
     if (!boundaryByte) {

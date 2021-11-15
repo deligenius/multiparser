@@ -45,33 +45,29 @@ interface Form {
 Suppose your form has two fields, the first one has field name `singleStr` with text "this is string value" only, and the second field called `singleImg` with a img file named "singleImg.png". 
 
 ```ts
-import { Server } from "https://deno.land/std@0.114.0/http/server.ts";
+import { serve } from "https://deno.land/std@0.114.0/http/server.ts";
 import { multiParser } from 'https://deno.land/x/multiparser@<version>/mod.ts'
 
-const server = new Server({
-  addr: ":8000", handler: async (req) => {
+serve(async (req) => {
 
-    const parsed = await multiParser(req)
-    console.log(parsed);
+  const parsed = await multiParser(req)
+  console.log(parsed);
 
 
-    return new Response(`
-    <h3>Deno http module</h3>
-    <form action="/upload" enctype="multipart/form-data" method="post">
-      <div>singleStr: <input type="text" name="singleStr" /></div>
-      <div>singleImg: <input type="file" name="singleImg"/></div>
-      <input type="submit" value="Upload" />
-    </form>
-  `, {
-      headers: {
-        "Content-Type": "text/html; charset=utf-8"
-      }
-    })
-  }
+  return new Response(`
+  <h3>Deno http module</h3>
+  <form action="/upload" enctype="multipart/form-data" method="post">
+    <div>singleStr: <input type="text" name="singleStr" /></div>
+    <div>singleImg: <input type="file" name="singleImg"/></div>
+    <input type="submit" value="Upload" />
+  </form>
+`, {
+    headers: {
+      "Content-Type": "text/html; charset=utf-8"
+    }
+  })
+
 });
-
-
-await server.listenAndServe()
 
 
 ```

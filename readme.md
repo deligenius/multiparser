@@ -25,7 +25,7 @@ const form = await multiParser(request)
 ```
 **Where**: 
 
-  ```request: serverRequest``` is a raw server request coming from Deno http module.
+  ```request: Request``` is a raw server request coming from Deno http module.
 
 **Result**: 
   - success, return `Form`

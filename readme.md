@@ -2,7 +2,7 @@
 
 > A Deno module for parsing multipart/form-data
 
-[![tag](https://img.shields.io/badge/Deno%20-std%400.89.0-333?&logo=Deno)](https://deno.land/std@0.89.0)
+[![tag](https://img.shields.io/badge/Deno%20-std%400.114.0-333?&logo=Deno)](https://deno.land/std@0.114.0)
 
 
 ### Features:
@@ -18,7 +18,7 @@ Multiparser version 2 aims to have better performance than V1. Since V1 is depen
 ### Usage
 ```ts
 // multiParser
-import { multiParser, Form, FormFile } from 'https://deno.land/x/multiparser@v2.1.0/mod.ts'
+import { multiParser, Form, FormFile } from 'https://deno.land/x/multiparser@<version>/mod.ts'
 
 const form = await multiParser(request)
 
@@ -45,29 +45,35 @@ interface Form {
 Suppose your form has two fields, the first one has field name `singleStr` with text "this is string value" only, and the second field called `singleImg` with a img file named "singleImg.png". 
 
 ```ts
-import { serve } from "https://deno.land/std@<version>/http/server.ts";
-import { multiParser } from 'https://deno.land/x/multiparser@v<version>/mod.ts'
+import { Server } from "https://deno.land/std@0.114.0/http/server.ts";
+import { multiParser } from 'https://deno.land/x/multiparser@<version>/mod.ts'
 
-const s = serve({ port: 8000 });
-for await (const req of s) {
-  if (req.url === "/upload") {
-    const form = await multiParser(req)
-    if (form) {
-      console.log(form)
-    }
-  }
+const server = new Server({
+  addr: ":8000", handler: async (req) => {
 
-  req.respond({
-    headers: new Headers({ "Content-Type": "text/html; charset=utf-8" }),
-    body: `
+    const parsed = await multiParser(req)
+    console.log(parsed);
+
+
+    return new Response(`
     <h3>Deno http module</h3>
     <form action="/upload" enctype="multipart/form-data" method="post">
       <div>singleStr: <input type="text" name="singleStr" /></div>
       <div>singleImg: <input type="file" name="singleImg"/></div>
       <input type="submit" value="Upload" />
     </form>
-  ` });
-}
+  `, {
+      headers: {
+        "Content-Type": "text/html; charset=utf-8"
+      }
+    })
+  }
+});
+
+
+await server.listenAndServe()
+
+
 ```
 
 After you upload the form, the returned value would be like below: 

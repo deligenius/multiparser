@@ -91,3 +91,37 @@ form = {
 }
 
 ```
+
+
+### With Oak 
+
+```ts
+import { Application, Context, NativeRequest } from "https://deno.land/x/oak@v10.5.0/mod.ts";
+import { multiParser } from 'https://deno.land/x/multiparser@<version>/mod.ts'
+
+const app = new Application();
+
+app.use(async (ctx) => {
+  const request = ctx.request.originalRequest
+  console.log(request);
+  
+  if (ctx.request.url.pathname === '/upload') {
+    const form = await multiParser((ctx.request.originalRequest as NativeRequest).request)
+    if (form) {
+      console.log(form)
+    }
+  }
+
+  ctx.response.headers.set("Content-Type", "text/html; charset=utf-8")
+  ctx.response.body = `
+     <h3>Deno Oak framework</h3>
+     <form action="/upload" enctype="multipart/form-data" method="post">
+       <div>Text field title: <input type="text" name="title" /></div>
+       <div>File: <input type="file" name="singleFile"/></div>
+       <input type="submit" value="Upload" />
+     </form>
+  `
+});
+
+await app.listen({ port: 8000 });
+```

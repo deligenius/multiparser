@@ -102,8 +102,6 @@ import { multiParser } from 'https://deno.land/x/multiparser@<version>/mod.ts'
 const app = new Application();
 
 app.use(async (ctx) => {
-  const request = ctx.request.originalRequest
-  console.log(request);
   
   if (ctx.request.url.pathname === '/upload') {
     const form = await multiParser((ctx.request.originalRequest as NativeRequest).request)

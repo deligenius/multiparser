@@ -1,4 +1,4 @@
-import {  bytes } from "../deps.ts";
+import {  bytes, readAll } from "../deps.ts";
 
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
@@ -27,14 +27,21 @@ export interface Form {
 }
 
 // TODO: provide options
-export async function multiParser(req: Request, option?: any) {
+export async function multiParser(
+  req: Request | { headers: Headers, raw: Deno.Reader}/*to accept opine request*/,
+  option?: any
+) {
   if (
     req.headers.has("content-type") &&
     req.headers.get("content-type")?.startsWith("multipart/form-data")
   ) {
-    const arrayBuf = await req.arrayBuffer()
+    let buf:Uint8Array;
 
-    let buf = new Uint8Array(arrayBuf);
+    //@ts-ignore Opine work around - for some rason if(req.raw) not work properly 
+    if (req.app) buf = await readAll(req.raw);
+    else
+      // for Request
+      buf = new Uint8Array(await (req as Request).arrayBuffer()):
 
     let boundaryByte = getBoundary(req.headers.get("content-type") as string);
     if (!boundaryByte) {
@@ -91,7 +98,7 @@ function getForm(pieces: Uint8Array[]) {
 }
 
 function getHeaders(headerByte: Uint8Array) {
-  let contentTypeIndex = bytes.indexOf(headerByte, encode.contentType);
+  let contentTypeIndex = bytes.indexOfNeedle(headerByte, encode.contentType);
 
   // no contentType, it may be a string field, return name only
   if (contentTypeIndex < 0) {
@@ -123,7 +130,7 @@ function getHeaderNContentType(
 function getHeaderOnly(headerLineByte: Uint8Array) {
   let headers: Record<string, string> = {};
 
-  let filenameIndex = bytes.indexOf(headerLineByte, encode.filename);
+  let filenameIndex = bytes.indexOfNeedle(headerLineByte, encode.filename);
   if (filenameIndex < 0) {
     headers.name = getNameOnly(headerLineByte);
   } else {
@@ -146,7 +153,7 @@ function getNameNFilename(headerLineByte: Uint8Array, filenameIndex: number) {
 }
 
 function getNameOnly(headerLineByte: Uint8Array) {
-  let nameIndex = bytes.indexOf(headerLineByte, encode.name);
+  let nameIndex = bytes.indexOfNeedle(headerLineByte, encode.name);
   // jump <name="> and get string inside double quote => "string"
   let nameByte = headerLineByte.slice(
     nameIndex + encode.name.byteLength ,
@@ -156,7 +163,7 @@ function getNameOnly(headerLineByte: Uint8Array) {
 }
 
 function splitPiece(piece: Uint8Array) {
-  const contentIndex = bytes.indexOf(piece, encode.returnNewline2);
+  const contentIndex = bytes.indexOfNeedle(piece, encode.returnNewline2);
   const headerByte = piece.slice(0, contentIndex);
   const contentByte = piece.slice(contentIndex + 4);
 
@@ -172,7 +179,7 @@ function getFieldPieces(buf: Uint8Array, boundaryByte: Uint8Array) {
   while (!bytes.startsWith(buf, endBoundaryByte)) {
     // jump over boundary + '\r\n'
     buf = buf.slice(startBoundaryByte.byteLength + 2);
-    let boundaryIndex = bytes.indexOf(buf, startBoundaryByte);
+    let boundaryIndex = bytes.indexOfNeedle(buf, startBoundaryByte);
     // get field content piece
     pieces.push(buf.slice(0, boundaryIndex - 2)); // -2 means remove /r/n
     buf = buf.slice(boundaryIndex);
@@ -183,7 +190,7 @@ function getFieldPieces(buf: Uint8Array, boundaryByte: Uint8Array) {
 
 function getBoundary(contentType: string): Uint8Array | undefined {
   let contentTypeByte = encoder.encode(contentType);
-  let boundaryIndex = bytes.indexOf(contentTypeByte, encode.boundaryEqual);
+  let boundaryIndex = bytes.indexOfNeedle(contentTypeByte, encode.boundaryEqual);
   if (boundaryIndex >= 0) {
     // jump over 'boundary=' to get the real boundary
     let boundary = contentTypeByte.slice(

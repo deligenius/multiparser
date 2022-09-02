@@ -1,5 +1,5 @@
 export type {
-  Form ,
+  Form,
   FormFile,
 } from "./lib/multiParserV2.ts";
 
